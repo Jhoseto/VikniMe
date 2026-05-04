@@ -1,0 +1,250 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Brand Colors ─────────────────────────────────── */
+  --color-navy-50: #eef1f9;
+  --color-navy-100: #d5dcf0;
+  --color-navy-200: #adb9e1;
+  --color-navy-300: #7e94ce;
+  --color-navy-400: #5570bb;
+  --color-navy-500: #1B2A5E;
+  --color-navy-600: #162350;
+  --color-navy-700: #101b40;
+  --color-navy-800: #0b122e;
+  --color-navy-900: #060a1c;
+
+  --color-orange-50: #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #fed7aa;
+  --color-orange-300: #fdba74;
+  --color-orange-400: #fb923c;
+  --color-orange-500: #F97316;
+  --color-orange-600: #ea6c0d;
+  --color-orange-700: #c2540a;
+  --color-orange-800: #9a3d08;
+  --color-orange-900: #7c3006;
+
+  --color-violet-50: #f5f3ff;
+  --color-violet-100: #ede9fe;
+  --color-violet-200: #ddd6fe;
+  --color-violet-300: #c4b5fd;
+  --color-violet-400: #a78bfa;
+  --color-violet-500: #8B5CF6;
+  --color-violet-600: #7c3aed;
+  --color-violet-700: #6d28d9;
+  --color-violet-800: #5b21b6;
+  --color-violet-900: #4c1d95;
+
+  --color-teal-50: #f0fdfa;
+  --color-teal-100: #ccfbf1;
+  --color-teal-200: #99f6e4;
+  --color-teal-300: #5eead4;
+  --color-teal-400: #2DD4BF;
+  --color-teal-500: #14b8a6;
+  --color-teal-600: #0d9488;
+  --color-teal-700: #0f766e;
+  --color-teal-800: #115e59;
+  --color-teal-900: #134e4a;
+
+  /* Neutral with navy undertone */
+  --color-surface-50: #f8f9fc;
+  --color-surface-100: #f0f2f8;
+  --color-surface-200: #e2e6f0;
+  --color-surface-300: #c8cedf;
+  --color-surface-400: #9aa2bb;
+  --color-surface-500: #6b7490;
+  --color-surface-600: #4e5670;
+  --color-surface-700: #353d55;
+  --color-surface-800: #1e253a;
+  --color-surface-900: #0f1322;
+
+  /* Semantic */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* ── Typography ────────────────────────────────────── */
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+
+  /* ── Spacing / Grid ────────────────────────────────── */
+  --spacing-safe-top: env(safe-area-inset-top, 0px);
+  --spacing-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --spacing-safe-left: env(safe-area-inset-left, 0px);
+  --spacing-safe-right: env(safe-area-inset-right, 0px);
+
+  /* ── Border Radius ─────────────────────────────────── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ───────────────────────────────────────── */
+  --shadow-card: 0 2px 12px 0 rgba(27, 42, 94, 0.08), 0 1px 3px 0 rgba(27, 42, 94, 0.04);
+  --shadow-card-hover: 0 8px 32px 0 rgba(27, 42, 94, 0.16), 0 2px 8px 0 rgba(27, 42, 94, 0.08);
+  --shadow-nav: 0 -2px 16px 0 rgba(27, 42, 94, 0.10);
+  --shadow-top: 0 4px 20px 0 rgba(27, 42, 94, 0.12);
+  --shadow-glow-orange: 0 0 20px 0 rgba(249, 115, 22, 0.35);
+  --shadow-glow-violet: 0 0 20px 0 rgba(139, 92, 246, 0.35);
+  --shadow-glow-teal: 0 0 20px 0 rgba(45, 212, 191, 0.35);
+}
+
+/* ── Gradients ────────────────────────────────────────── */
+:root {
+  /* Core brand – matches logo: navy → violet */
+  --gradient-brand:   linear-gradient(135deg, #1B2A5E 0%, #7C4DCC 100%);
+  /* Logo full sweep: navy → violet → teal (the .me gradient) */
+  --gradient-logo:    linear-gradient(135deg, #1B2A5E 0%, #7C4DCC 52%, #2DD4BF 100%);
+  /* Energy / CTA: orange → violet */
+  --gradient-energy:  linear-gradient(135deg, #E8581F 0%, #7C4DCC 100%);
+  /* Fresh: navy → teal */
+  --gradient-primary: linear-gradient(135deg, #1B2A5E 0%, #2DD4BF 100%);
+  /* Hero background: rich tricolor */
+  --gradient-hero:    linear-gradient(150deg, #111D40 0%, #1B2A5E 35%, #5A35A8 70%, #E8581F 100%);
+  /* Warm CTA: orange → teal */
+  --gradient-sunset:  linear-gradient(135deg, #E8581F 0%, #2DD4BF 100%);
+
+  /* Category-specific gradients */
+  --gradient-cat-massage:     linear-gradient(135deg, #1B2A5E, #7C4DCC);
+  --gradient-cat-sports:      linear-gradient(135deg, #1B2A5E, #2DD4BF);
+  --gradient-cat-cleaning:    linear-gradient(135deg, #0A9E8D, #1B2A5E);
+  --gradient-cat-beauty:      linear-gradient(135deg, #E8581F, #7C4DCC);
+  --gradient-cat-cooking:     linear-gradient(135deg, #E8581F, #1B2A5E);
+  --gradient-cat-photography: linear-gradient(135deg, #2A1A4A, #E8581F);
+  --gradient-cat-music:       linear-gradient(135deg, #7C4DCC, #2DD4BF);
+  --gradient-cat-tutoring:    linear-gradient(135deg, #1B2A5E, #4A6FA8);
+  --gradient-cat-pets:        linear-gradient(135deg, #E8581F, #0A9E8D);
+  --gradient-cat-fitness:     linear-gradient(135deg, #E8581F, #7C4DCC);
+  --gradient-cat-default:     linear-gradient(135deg, #1B2A5E, #7C4DCC);
+
+  /* Glows (for hover states) */
+  --glow-violet: 0 12px 32px -4px rgba(124, 77, 204, 0.45);
+  --glow-orange: 0 12px 32px -4px rgba(232, 88, 31, 0.45);
+  --glow-teal:   0 12px 32px -4px rgba(45, 212, 191, 0.40);
+  --glow-navy:   0 12px 32px -4px rgba(27, 42, 94, 0.40);
+
+  /* Refined card shadows */
+  --shadow-card:       0 2px 10px -1px rgba(27,42,94,0.09), 0 1px 3px -1px rgba(27,42,94,0.05);
+  --shadow-card-hover: 0 16px 40px -8px rgba(27,42,94,0.22), 0 4px 12px -4px rgba(27,42,94,0.10);
+  --shadow-brand-glow: 0 8px 24px -4px rgba(124,77,204,0.4);
+  --shadow-top:        0 4px 20px 0 rgba(27,42,94,0.10);
+  --shadow-nav:        0 -2px 16px 0 rgba(27,42,94,0.08);
+}
+
+/* ── Base Styles ──────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  color: var(--color-surface-800);
+  background-color: var(--color-surface-50);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+}
+
+/* Momentum scrolling for mobile */
+.scroll-momentum {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}
+
+/* PWA safe area padding helpers */
+.safe-top    { padding-top: env(safe-area-inset-top, 0px); }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.safe-left   { padding-left: env(safe-area-inset-left, 0px); }
+.safe-right  { padding-right: env(safe-area-inset-right, 0px); }
+
+/* ── Typography Utilities ─────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Focus Styles ─────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-orange-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Scrollbar ────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-surface-300); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-surface-400); }
+
+/* Hide scrollbar but keep scroll functionality */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── Page Transitions ─────────────────────────────────── */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-enter {
+  animation: page-in 0.25s ease-out forwards;
+}
+
+/* ── Skeleton Loader ──────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-100) 25%,
+    var(--color-surface-200) 50%,
+    var(--color-surface-100) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+/* ── Reduced Motion ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
