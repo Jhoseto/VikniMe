@@ -40,7 +40,7 @@ export default function AdminReviewsPage() {
       header: 'Автор',
       cell: ({ row }: CellContext<ReviewItem, unknown>) => (
         <div className="flex items-center gap-2">
-          <Avatar src={row.original.reviewer.avatar_url} name={row.original.reviewer.full_name} size="xs" />
+          <Avatar src={row.original.reviewer.avatar_url} name={row.original.reviewer.full_name} userId={row.original.reviewer.id} size="xs" />
           <span className="text-sm font-medium text-surface-800">{row.original.reviewer.full_name}</span>
         </div>
       ),

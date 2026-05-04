@@ -60,7 +60,7 @@ function BookingCard({ booking }: { booking: BookingWithRelations }) {
             </div>
           )}
           <div className="absolute -bottom-1.5 -right-1.5">
-            <Avatar src={booking.supplier.avatar_url} name={booking.supplier.full_name} size="xs" className="ring-2 ring-white" />
+            <Avatar src={booking.supplier.avatar_url} name={booking.supplier.full_name} userId={booking.supplier.id} size="xs" className="ring-2 ring-white" />
           </div>
         </div>
 

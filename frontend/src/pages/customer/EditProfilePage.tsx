@@ -86,6 +86,7 @@ export default function EditProfilePage() {
           <AvatarCropDialog
             currentAvatar={avatarUrl ?? profile.avatar_url}
             name={profile.full_name}
+            userId={profile.id}
             onSave={dataUrl => {
               setAvatarUrl(dataUrl)
               toast.success('Снимката е готова – ще се запише заедно с профила')

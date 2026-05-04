@@ -57,7 +57,7 @@ export default function AdminEnrollmentsPage() {
       accessorKey: 'user.full_name',
       cell: ({ row }: CellContext<EnrollRequest, unknown>) => (
         <div className="flex items-center gap-3 py-0.5">
-          <Avatar src={row.original.user.avatar_url} name={row.original.user.full_name ?? 'Потребител'} size="sm" />
+          <Avatar src={row.original.user.avatar_url} name={row.original.user.full_name ?? 'Потребител'} userId={row.original.user.id} size="sm" />
           <div>
             <p className="font-medium text-surface-800">{row.original.user.full_name}</p>
             <p className="text-xs text-surface-400">{row.original.user.email}</p>

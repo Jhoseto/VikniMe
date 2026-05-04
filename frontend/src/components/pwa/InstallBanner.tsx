@@ -82,7 +82,7 @@ export function InstallBanner() {
                   Натисни <Share size={12} className="inline" /> и след това „Добави на начален екран"
                 </p>
               ) : (
-                <p className="text-xs text-surface-500 mt-0.5">Добави към началния екран за по-бързо отваряне</p>
+                <p className="text-xs text-surface-500 mt-0.5">Инсталирай на мобилното си Устройство</p>
               )}
 
               {!showIOS && (

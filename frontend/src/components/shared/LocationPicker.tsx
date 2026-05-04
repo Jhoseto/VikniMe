@@ -10,13 +10,9 @@ import { Drawer } from 'vaul'
 import { MapPin, LocateFixed, Search, X, Check } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { clsx } from 'clsx'
+import { BG_ALL_BG_CITIES } from '@/lib/mock/bg-cities'
 
-const BG_CITIES = [
-  'София', 'Пловдив', 'Варна', 'Бургас', 'Русе', 'Стара Загора',
-  'Плевен', 'Велико Търново', 'Благоевград', 'Банско', 'Боровец',
-  'Несебър', 'Пампорово', 'Казанлък', 'Видин', 'Ямбол', 'Монтана',
-  'Хасково', 'Шумен', 'Кърджали', 'Добрич', 'Враца', 'Габрово',
-]
+const BG_CITIES = [...BG_ALL_BG_CITIES]
 
 interface LocationPickerProps {
   value:    string

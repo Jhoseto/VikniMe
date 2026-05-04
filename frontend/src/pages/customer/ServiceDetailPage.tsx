@@ -217,7 +217,7 @@ function BookingWidget({ service }: { service: ServiceWithRelations }) {
 function ReviewCard({ review }: { review: ReviewWithReviewer }) {
   return (
     <motion.div variants={staggerItem} className="flex gap-3">
-      <Avatar src={review.reviewer.avatar_url} name={review.reviewer.full_name} size="sm" className="shrink-0 mt-0.5" />
+      <Avatar src={review.reviewer.avatar_url} name={review.reviewer.full_name} userId={review.reviewer.id} size="sm" className="shrink-0 mt-0.5" />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <span className="font-semibold text-sm text-surface-800">{review.reviewer.full_name}</span>
@@ -350,7 +350,7 @@ export default function ServiceDetailPage() {
             <div className="bg-white rounded-2xl p-5" style={{ boxShadow: 'var(--shadow-card)' }}>
               <h2 className="font-display font-bold text-navy-500 mb-4">Доставчик</h2>
               <div className="flex items-center gap-4">
-                <Avatar src={service.profiles.avatar_url} name={service.profiles.full_name} size="lg" />
+                <Avatar src={service.profiles.avatar_url} name={service.profiles.full_name} userId={service.profiles.id} size="lg" />
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-surface-800">{service.profiles.full_name}</p>
                   <div className="flex items-center gap-1 mt-0.5">

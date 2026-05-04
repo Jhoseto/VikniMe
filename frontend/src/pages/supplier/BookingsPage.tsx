@@ -49,7 +49,7 @@ function BookingCard({ booking }: { booking: BookingWithRelations }) {
   return (
     <motion.div variants={staggerItem} className="bg-white rounded-2xl p-4" style={{ boxShadow: 'var(--shadow-card)' }}>
       <div className="flex items-start gap-3">
-        <Avatar src={booking.customer.avatar_url} name={booking.customer.full_name} size="md" className="shrink-0" />
+        <Avatar src={booking.customer.avatar_url} name={booking.customer.full_name} userId={booking.customer.id} size="md" className="shrink-0" />
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2 flex-wrap">
             <p className="font-semibold text-sm text-surface-800">{booking.customer.full_name}</p>

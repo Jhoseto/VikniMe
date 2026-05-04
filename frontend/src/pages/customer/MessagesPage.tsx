@@ -87,7 +87,7 @@ function DesktopChatPanel({ otherUserId }: { otherUserId: string }) {
       {/* Header */}
       {other && (
         <div className="flex items-center gap-3 px-5 py-3.5 border-b border-surface-100 bg-white shrink-0">
-          <Avatar src={other.avatar_url} name={other.full_name} size="sm" />
+          <Avatar src={other.avatar_url} name={other.full_name} userId={other.id} size="sm" />
           <p className="font-semibold text-surface-800 text-sm">{other.full_name}</p>
         </div>
       )}
@@ -140,7 +140,7 @@ function ThreadItem({ thread, active, onSelect }: { thread: ChatThread; active: 
         active && 'bg-navy-50 hover:bg-navy-50')}
     >
       <div className="relative shrink-0">
-        <Avatar src={thread.otherUser.avatar_url} name={thread.otherUser.full_name} size="sm" />
+        <Avatar src={thread.otherUser.avatar_url} name={thread.otherUser.full_name} userId={thread.otherUser.id} size="sm" />
         {thread.unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 w-4.5 h-4.5 bg-orange-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full">{thread.unreadCount}</span>
         )}
@@ -289,7 +289,7 @@ function MobileThreadList({ threads, isLoading }: { threads: ChatThread[]; isLoa
               t.unreadCount > 0 && 'ring-1 ring-navy-200')}
             style={{ boxShadow: 'var(--shadow-card)' }}>
             <div className="relative shrink-0">
-              <Avatar src={t.otherUser.avatar_url} name={t.otherUser.full_name} size="md" />
+              <Avatar src={t.otherUser.avatar_url} name={t.otherUser.full_name} userId={t.otherUser.id} size="md" />
               {t.unreadCount > 0 && (
                 <span className="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-white text-xs font-bold flex items-center justify-center rounded-full">{t.unreadCount}</span>
               )}

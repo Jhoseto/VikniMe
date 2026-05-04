@@ -91,13 +91,12 @@ export default defineConfig({
               expiration: { maxEntries: 100, maxAgeSeconds: 7 * 24 * 60 * 60 },
             },
           },
-          // DiceBear avatars
           {
-            urlPattern: /^https:\/\/api\.dicebear\.com\/.*/i,
+            urlPattern: /^https:\/\/tile\.openstreetmap\.org\/.*/i,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'dicebear-avatars',
-              expiration: { maxEntries: 50, maxAgeSeconds: 7 * 24 * 60 * 60 },
+              cacheName: 'osm-map-tiles',
+              expiration: { maxEntries: 200, maxAgeSeconds: 7 * 24 * 60 * 60 },
             },
           },
         ],

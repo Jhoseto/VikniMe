@@ -11,6 +11,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useUiStore } from '@/stores/uiStore'
 import { useNotificationStore } from '@/stores/notificationStore'
 import { clsx } from 'clsx'
+import { Avatar } from '@/components/ui/Avatar'
 
 /* ── .me gradient (from logo) ──────────────────────────────── */
 const ME_GRADIENT        = 'linear-gradient(135deg, #7C4DCC 0%, #2DD4BF 100%)'
@@ -166,10 +167,6 @@ export function LeftSidebar() {
   const isSupplier = profile?.role === 'supplier' || profile?.role === 'admin'
   const isAdmin    = profile?.role === 'admin'
 
-  const initials = profile?.full_name
-    ? profile.full_name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase()
-    : profile?.email?.[0]?.toUpperCase() ?? '?'
-
   return (
     <motion.aside
       animate={{ width: collapsed ? 72 : 260 }}
@@ -243,15 +240,13 @@ export function LeftSidebar() {
             style={{ padding: collapsed ? '8px 0' : '8px 10px' }}>
             {/* Avatar */}
             <div className="shrink-0 mx-auto" style={collapsed ? {} : { marginLeft: 0 }}>
-              {profile.avatar_url ? (
-                <img src={profile.avatar_url} alt={profile.full_name ?? ''}
-                  className="w-8 h-8 rounded-full object-cover ring-2 ring-surface-100" />
-              ) : (
-                <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
-                  style={{ background: ME_GRADIENT }}>
-                  {initials}
-                </div>
-              )}
+              <Avatar
+                src={profile.avatar_url}
+                name={profile.full_name ?? profile.email}
+                userId={profile.id}
+                size="sm"
+                className="ring-2 ring-surface-100"
+              />
             </div>
 
             <AnimatePresence initial={false}>

@@ -126,7 +126,7 @@ export default function ProfilePage() {
         <div className="max-w-2xl mx-auto px-4 py-6">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <Avatar src={profile.avatar_url} name={profile.full_name} size="xl" />
+              <Avatar src={profile.avatar_url} name={profile.full_name} userId={profile.id} size="xl" />
               {profile.is_verified && (
                 <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center ring-2 ring-white">
                   <Shield size={12} className="text-white" />

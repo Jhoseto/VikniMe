@@ -19,7 +19,7 @@ export default function AdminUsersPage() {
       accessorKey: 'full_name',
       cell: ({ row }: CellContext<ProfileRow, unknown>) => (
         <div className="flex items-center gap-3 py-0.5">
-          <Avatar src={row.original.avatar_url} name={row.original.full_name} size="sm" />
+          <Avatar src={row.original.avatar_url} name={row.original.full_name} userId={row.original.id} size="sm" />
           <div>
             <p className="font-medium text-surface-800">{row.original.full_name}</p>
             <p className="text-xs text-surface-400">{row.original.email}</p>

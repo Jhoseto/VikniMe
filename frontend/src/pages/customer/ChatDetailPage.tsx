@@ -151,7 +151,7 @@ export default function ChatDetailPage() {
           <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-surface-100 transition-colors" aria-label="Назад">
             <ArrowLeft size={20} className="text-surface-600" />
           </button>
-          <Avatar src={otherUser?.avatar_url} name={otherUser?.full_name ?? '?'} size="sm" />
+          <Avatar src={otherUser?.avatar_url} name={otherUser?.full_name ?? '?'} userId={otherUser?.id} size="sm" />
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-sm text-surface-800 truncate">{otherUser?.full_name}</p>
             <div className="flex items-center gap-1.5">
@@ -191,7 +191,7 @@ export default function ChatDetailPage() {
                   </p>
                 )}
                 <div className={clsx('flex items-end gap-2', isMine ? 'justify-end' : 'justify-start')}>
-                  {!isMine && <Avatar src={otherUser?.avatar_url} name={otherUser?.full_name ?? '?'} size="xs" className="mb-0.5 shrink-0" />}
+                  {!isMine && <Avatar src={otherUser?.avatar_url} name={otherUser?.full_name ?? '?'} userId={otherUser?.id} size="xs" className="mb-0.5 shrink-0" />}
                   <div className="max-w-[75%] space-y-0.5">
                     {isImage && (
                       <div className={clsx('flex', isMine ? 'justify-end' : 'justify-start')}>

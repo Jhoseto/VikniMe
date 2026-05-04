@@ -225,6 +225,7 @@ export default function BookingDetailPage() {
           <Avatar
             src={isCustomer ? booking.supplier.avatar_url : booking.customer.avatar_url}
             name={isCustomer ? booking.supplier.full_name : booking.customer.full_name}
+            userId={isCustomer ? booking.supplier.id : booking.customer.id}
             size="md"
           />
           <div className="flex-1 min-w-0">

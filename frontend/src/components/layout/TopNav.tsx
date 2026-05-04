@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { Bell, Search, LogIn } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
+import { Avatar } from '@/components/ui/Avatar'
 import { useNotificationStore } from '@/stores/notificationStore'
 
 export function TopNav() {
@@ -30,15 +31,13 @@ export function TopNav() {
                 {unreadCount > 0 && <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-orange-500" />}
               </Link>
               <Link to="/profile" className="flex items-center gap-2 group">
-                <div className="w-8 h-8 rounded-full overflow-hidden bg-navy-100 ring-2 ring-transparent group-hover:ring-navy-200 transition-all">
-                  {profile.avatar_url ? (
-                    <img src={profile.avatar_url} alt={profile.full_name ?? 'Профил'} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-navy-500 font-bold text-sm">
-                      {profile.full_name?.[0]?.toUpperCase() ?? profile.email[0].toUpperCase()}
-                    </div>
-                  )}
-                </div>
+                <Avatar
+                  src={profile.avatar_url}
+                  name={profile.full_name ?? profile.email}
+                  userId={profile.id}
+                  size="sm"
+                  className="ring-2 ring-transparent group-hover:ring-navy-200 transition-all"
+                />
               </Link>
             </>
           ) : (

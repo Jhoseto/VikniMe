@@ -72,7 +72,7 @@ function ThreadItem({ thread, active, onClick }: { thread: SupportThread; active
     <button onClick={onClick}
       className={clsx('w-full flex items-start gap-3 px-4 py-4 text-left transition-colors border-b border-surface-100 hover:bg-surface-50',
         active && 'bg-navy-50 hover:bg-navy-50')}>
-      <Avatar src={thread.user.avatar_url} name={thread.user.full_name} size="sm" />
+      <Avatar src={thread.user.avatar_url} name={thread.user.full_name} userId={thread.user.id} size="sm" />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2 mb-0.5">
           <p className="text-sm font-semibold text-surface-800 truncate">{thread.user.full_name}</p>
@@ -109,7 +109,7 @@ function ThreadChat({ thread, onResolve }: { thread: SupportThread; onResolve: (
       {/* Thread header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-surface-100 bg-white shrink-0">
         <div className="flex items-center gap-3">
-          <Avatar src={thread.user.avatar_url} name={thread.user.full_name} size="sm" />
+          <Avatar src={thread.user.avatar_url} name={thread.user.full_name} userId={thread.user.id} size="sm" />
           <div>
             <p className="font-semibold text-sm text-surface-800">{thread.user.full_name}</p>
             <p className="text-xs text-surface-400">{thread.subject}</p>

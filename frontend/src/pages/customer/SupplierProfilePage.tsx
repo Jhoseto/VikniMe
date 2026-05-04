@@ -71,7 +71,7 @@ export default function SupplierProfilePage() {
         {/* Avatar */}
         <div className="absolute -bottom-12 left-1/2 -translate-x-1/2">
           <div className="ring-4 ring-white rounded-full">
-            <Avatar src={profile.avatar_url} name={profile.full_name} size="xl" />
+            <Avatar src={profile.avatar_url} name={profile.full_name} userId={profile.id} size="xl" />
           </div>
         </div>
       </div>
@@ -158,7 +158,7 @@ export default function SupplierProfilePage() {
             {reviews.map(r => (
               <motion.div key={r.id} variants={staggerItem}
                 className="bg-white rounded-2xl p-4 flex gap-3" style={{ boxShadow: 'var(--shadow-card)' }}>
-                <Avatar src={r.reviewer.avatar_url} name={r.reviewer.full_name} size="sm" className="shrink-0 mt-0.5" />
+                <Avatar src={r.reviewer.avatar_url} name={r.reviewer.full_name} userId={r.reviewer.id} size="sm" className="shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between flex-wrap gap-2">
                     <span className="font-semibold text-sm text-surface-800">{r.reviewer.full_name}</span>

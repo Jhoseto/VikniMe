@@ -41,10 +41,11 @@ async function getCroppedBlob(image: HTMLImageElement, crop: PixelCrop): Promise
 interface AvatarCropDialogProps {
   currentAvatar?: string | null
   name?: string | null
+  userId?: string | null
   onSave: (dataUrl: string) => void
 }
 
-export function AvatarCropDialog({ currentAvatar, name, onSave }: AvatarCropDialogProps) {
+export function AvatarCropDialog({ currentAvatar, name, userId, onSave }: AvatarCropDialogProps) {
   const [src, setSrc]           = useState<string | null>(null)
   const [crop, setCrop]         = useState<Crop>()
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
@@ -85,7 +86,7 @@ export function AvatarCropDialog({ currentAvatar, name, onSave }: AvatarCropDial
       {/* Trigger area */}
       <div className="flex flex-col items-center gap-3">
         <div className="relative group cursor-pointer" onClick={() => inputRef.current?.click()}>
-          <Avatar src={currentAvatar} name={name} size="xl" />
+          <Avatar src={currentAvatar} name={name} userId={userId} size="xl" />
           <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
             <Upload size={20} className="text-white" />
           </div>

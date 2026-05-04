@@ -431,14 +431,20 @@ export default function SearchPage() {
             </div>
           </div>
 
-          {/* Map */}
+          {/* Map — същите хоризонтални отстояния като чиповете и резултатите (px-4) */}
           <AnimatePresence>
             {showMap && (
-              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: '50vh' }} exit={{ opacity: 0, height: 0 }}
-                className="overflow-hidden bg-surface-100 shrink-0">
-                <Suspense fallback={<div className="h-full flex items-center justify-center text-surface-400 text-sm">Зарежда карта...</div>}>
-                  <ServiceMap services={results} className="w-full h-full" />
-                </Suspense>
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: '50vh' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="shrink-0 overflow-hidden bg-surface-100"
+              >
+                <div className="h-full min-h-0 box-border px-4 py-3">
+                  <Suspense fallback={<div className="h-full min-h-[160px] flex items-center justify-center text-surface-400 text-sm">Зарежда карта...</div>}>
+                    <ServiceMap services={results} className="h-full w-full min-h-0" />
+                  </Suspense>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

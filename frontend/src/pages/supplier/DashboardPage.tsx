@@ -112,7 +112,7 @@ export default function SupplierDashboardPage() {
       {/* Header */}
       <div className="bg-white border-b border-surface-100 safe-top">
         <div className="max-w-4xl mx-auto px-4 py-5 flex items-center gap-4">
-          <Avatar src={profile?.avatar_url} name={profile?.full_name ?? ''} size="md" />
+          <Avatar src={profile?.avatar_url} name={profile?.full_name ?? ''} userId={profile?.id} size="md" />
           <div>
             <p className="text-xs text-surface-400">Добре дошъл,</p>
             <h1 className="font-display font-bold text-xl text-navy-500">{profile?.full_name}</h1>
@@ -199,7 +199,7 @@ export default function SupplierDashboardPage() {
               {bookings.slice(0, 5).map(b => (
                 <Link key={b.id} to={`/bookings/${b.id}`}
                   className="flex items-center gap-3 px-4 py-3.5 hover:bg-surface-50 transition-colors">
-                  <Avatar src={b.customer.avatar_url} name={b.customer.full_name} size="sm" />
+                  <Avatar src={b.customer.avatar_url} name={b.customer.full_name} userId={b.customer.id} size="sm" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-surface-800 truncate">{b.customer.full_name}</p>
                     <p className="text-xs text-surface-400 truncate">{b.service.title}</p>

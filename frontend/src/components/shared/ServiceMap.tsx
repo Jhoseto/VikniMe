@@ -1,36 +1,35 @@
 ﻿/**
- * ServiceMap – interactive MapLibre GL map with service markers.
- * Shows clusters when zoomed out, individual markers when zoomed in.
- * Clicking a marker shows a ServiceCard popup.
+ * ServiceMap – MapLibre карта с OpenStreetMap (детайл до улично ниво) и контур на България.
  */
-import { useState, useCallback, useRef } from 'react'
-import Map, { Marker, Popup, NavigationControl, type MapRef } from 'react-map-gl/maplibre'
+import { useMemo, useState, useCallback, useRef } from 'react'
+import Map, { Marker, Popup, NavigationControl, Source, Layer, type MapRef } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { MapPin, X } from 'lucide-react'
+import { MapPin, X, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { Star } from 'lucide-react'
 import { clsx } from 'clsx'
 import type { ServiceWithRelations } from '@/api/services'
+import { BG_ALL_BG_CITIES } from '@/lib/mock/bg-cities'
+import { BG_CITY_COORDS } from '@/lib/mock/bg-city-coords'
+import { BULGARIA_BASEMAP_STYLE, BULGARIA_MAX_BOUNDS, BULGARIA_OUTLINE } from '@/lib/map-bulgaria'
 
-/* ── Approximate coordinates per Bulgarian city ─────────── */
-const CITY_COORDS: Record<string, [number, number]> = {
-  'София':      [42.6977, 23.3219],
-  'Варна':      [43.2141, 27.9147],
-  'Пловдив':    [42.1354, 24.7453],
-  'Банско':     [41.8370, 23.4880],
-  'Бургас':     [42.5048, 27.4626],
-  'Боровец':    [42.2676, 23.5949],
-  'Несебър':    [42.6591, 27.7153],
-  'Пампорово':  [41.6590, 24.6838],
+/** По-дълги имена първо, за да хване „Велико Търново“ пред „Търново“ и т.н. */
+const CITIES_LONGEST_FIRST = [...BG_ALL_BG_CITIES].sort((a, b) => b.length - a.length)
+
+function stableCoordOffset(seed: string): [number, number] {
+  let h = 0
+  for (let i = 0; i < seed.length; i++) h = Math.imul(31, h) + seed.charCodeAt(i) | 0
+  const u = Math.abs(h)
+  return [(u % 200 - 100) * 8e-6, (Math.floor(u / 200) % 200 - 100) * 8e-6]
 }
 
-function getCoords(location: string | null): [number, number] | null {
+function getCoords(location: string | null, serviceId: string): [number, number] | null {
   if (!location) return null
-  for (const [city, coords] of Object.entries(CITY_COORDS)) {
-    if (location.includes(city)) {
-      // Add slight jitter so overlapping markers are visible
-      return [coords[0] + (Math.random() - 0.5) * 0.01, coords[1] + (Math.random() - 0.5) * 0.01]
-    }
+  for (const city of CITIES_LONGEST_FIRST) {
+    if (!location.includes(city)) continue
+    const base = BG_CITY_COORDS[city]
+    if (!base) continue
+    const [dlat, dlng] = stableCoordOffset(`${serviceId}:${city}`)
+    return [base[0] + dlat, base[1] + dlng]
   }
   return null
 }
@@ -91,16 +90,31 @@ export function ServiceMap({ services, className }: ServiceMapProps) {
   const mapRef = useRef<MapRef>(null)
   const [selected, setSelected] = useState<ServiceWithRelations | null>(null)
 
-  // Filter services with mappable locations
-  const mappable = services.flatMap(svc => {
-    const coords = getCoords(svc.location)
-    return coords ? [{ svc, lat: coords[0], lng: coords[1] }] : []
-  })
+  const mappable = useMemo(
+    () =>
+      services.flatMap(svc => {
+        const coords = getCoords(svc.location, svc.id)
+        return coords ? [{ svc, lat: coords[0], lng: coords[1] }] : []
+      }),
+    [services],
+  )
 
   const handleMarkerClick = useCallback((svc: ServiceWithRelations, lat: number, lng: number) => {
     setSelected(svc)
-    mapRef.current?.easeTo({ center: [lng, lat], duration: 400 })
+    mapRef.current?.easeTo({ center: [lng, lat], duration: 400, zoom: Math.max(mapRef.current?.getZoom() ?? 0, 10) })
   }, [])
+
+  const { avgLat, avgLng, initialZoom } = useMemo(() => {
+    if (mappable.length === 0) return { avgLat: 42.73, avgLng: 25.48, initialZoom: 6.8 }
+    const lat = mappable.reduce((s, m) => s + m.lat, 0) / mappable.length
+    const lng = mappable.reduce((s, m) => s + m.lng, 0) / mappable.length
+    const spread = Math.hypot(
+      Math.max(...mappable.map(m => m.lat)) - Math.min(...mappable.map(m => m.lat)),
+      Math.max(...mappable.map(m => m.lng)) - Math.min(...mappable.map(m => m.lng)),
+    )
+    const zoom = spread < 0.35 ? 9.2 : spread < 1.2 ? 7.4 : spread < 3 ? 6.4 : 5.8
+    return { avgLat: lat, avgLng: lng, initialZoom: zoom }
+  }, [mappable])
 
   if (mappable.length === 0) {
     return (
@@ -113,20 +127,38 @@ export function ServiceMap({ services, className }: ServiceMapProps) {
     )
   }
 
-  // Center on average of all coords
-  const avgLat = mappable.reduce((s, m) => s + m.lat, 0) / mappable.length
-  const avgLng = mappable.reduce((s, m) => s + m.lng, 0) / mappable.length
-
   return (
-    <div className={clsx('rounded-2xl overflow-hidden relative', className)}>
+    <div className={clsx('rounded-2xl overflow-hidden relative bg-white', className)}>
       <Map
         ref={mapRef}
-        initialViewState={{ latitude: avgLat, longitude: avgLng, zoom: 7 }}
+        initialViewState={{ latitude: avgLat, longitude: avgLng, zoom: initialZoom }}
         style={{ width: '100%', height: '100%' }}
-        mapStyle="https://demotiles.maplibre.org/style.json"
-        attributionControl={false}
+        mapStyle={BULGARIA_BASEMAP_STYLE}
+        maxBounds={BULGARIA_MAX_BOUNDS}
+        minZoom={5}
+        maxZoom={18}
+        attributionControl={{ compact: true }}
+        maplibreLogo={false}
+        reuseMaps
       >
-        <NavigationControl position="top-right" />
+        <Source id="bulgaria-outline" type="geojson" data={BULGARIA_OUTLINE}>
+          <Layer
+            id="bg-country-fill"
+            type="fill"
+            paint={{ 'fill-color': '#64748b', 'fill-opacity': 0.02 }}
+          />
+          <Layer
+            id="bg-country-line"
+            type="line"
+            paint={{
+              'line-color': '#94a3b8',
+              'line-opacity': 0.45,
+              'line-width': ['interpolate', ['linear'], ['zoom'], 5, 0.8, 10, 1.4, 16, 2],
+            }}
+          />
+        </Source>
+
+        <NavigationControl position="top-right" showCompass={false} />
 
         {mappable.map(({ svc, lat, lng }) => (
           <Marker key={svc.id} latitude={lat} longitude={lng} anchor="bottom">

@@ -1,4 +1,7 @@
 import type { ProfileRow, CategoryRow, ServiceRow, BookingRow, ReviewRow, NotificationRow } from '@/types/database'
+import { MOCK_GENERATED_SUPPLIERS, MOCK_GENERATED_SERVICES } from './mock-supplier-batch'
+
+export { BG_ALL_BG_CITIES } from './bg-cities'
 
 /* ─────────────────────────────────────────────────────────────
    PROFILES / USERS
@@ -8,7 +11,7 @@ export const MOCK_PROFILES: ProfileRow[] = [
     id: 'user-customer-1',
     email: 'demo@vikni.me',
     full_name: 'Иван Петров',
-    avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Ivan',
+    avatar_url: null,
     phone: '+359 88 123 4567',
     role: 'customer',
     bio: 'Обичам да пробвам нови услуги и да срещам интересни хора.',
@@ -22,7 +25,7 @@ export const MOCK_PROFILES: ProfileRow[] = [
     id: 'supplier-1',
     email: 'maria@vikni.me',
     full_name: 'Мария Николова',
-    avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Maria',
+    avatar_url: null,
     phone: '+359 87 234 5678',
     role: 'supplier',
     bio: 'Сертифициран масажист с над 8 години опит в спортния и релаксиращ масаж. Работя с индивидуален подход към всеки клиент.',
@@ -36,7 +39,7 @@ export const MOCK_PROFILES: ProfileRow[] = [
     id: 'supplier-2',
     email: 'georgi@vikni.me',
     full_name: 'Георги Стоянов',
-    avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Georgi',
+    avatar_url: null,
     phone: '+359 89 345 6789',
     role: 'supplier',
     bio: 'Ски инструктор с 12+ години опит в Банско и Боровец. Работя с деца от 4 г. и с напреднали скиори.',
@@ -50,7 +53,7 @@ export const MOCK_PROFILES: ProfileRow[] = [
     id: 'supplier-3',
     email: 'elena@vikni.me',
     full_name: 'Елена Димитрова',
-    avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Elena',
+    avatar_url: null,
     phone: '+359 88 456 7890',
     role: 'supplier',
     bio: 'Фотограф с 6 г. опит — сватби, портрети, корпоративни снимки. Работя с естествена светлина и разказвам истории.',
@@ -64,7 +67,7 @@ export const MOCK_PROFILES: ProfileRow[] = [
     id: 'supplier-4',
     email: 'petar@vikni.me',
     full_name: 'Петър Иванов',
-    avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Petar',
+    avatar_url: null,
     phone: '+359 87 567 8901',
     role: 'supplier',
     bio: 'Личен готвач — готвя у вас за специални поводи, семейни вечери или корпоративни събития. Спец. в средиземноморска кухня.',
@@ -78,7 +81,7 @@ export const MOCK_PROFILES: ProfileRow[] = [
     id: 'supplier-5',
     email: 'ana@vikni.me',
     full_name: 'Ана Костова',
-    avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Ana',
+    avatar_url: null,
     phone: '+359 89 678 9012',
     role: 'supplier',
     bio: 'Персонален треньор, сертифициран по NASM. Тренировки у дома или в залата — изграждам програма специално за теб.',
@@ -88,6 +91,7 @@ export const MOCK_PROFILES: ProfileRow[] = [
     created_at: '2025-02-01T11:00:00Z',
     updated_at: '2025-04-15T10:00:00Z',
   },
+  ...MOCK_GENERATED_SUPPLIERS,
   {
     id: 'admin-1',
     email: 'admin@vikni.me',
@@ -141,7 +145,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     price_type: 'fixed',
     images: [
       'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80',
-      'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=600&q=80',
+      'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=600&q=80',
     ],
     location: 'София (цяла)',
     lat: 42.6977,
@@ -151,7 +155,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     review_count: 47,
     created_at: '2024-11-10T10:00:00Z',
     updated_at: '2025-04-01T11:00:00Z',
-    profiles:   { id: 'supplier-1', full_name: 'Мария Николова',  avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Maria' },
+    profiles:   { id: 'supplier-1', full_name: 'Мария Николова',  avatar_url: null },
     categories: { id: 'cat-1', name: 'Масаж', slug: 'massage', icon: '💆' },
   },
   {
@@ -163,7 +167,8 @@ export const MOCK_SERVICES: (ServiceRow & {
     price: 110,
     price_type: 'fixed',
     images: [
-      'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=600&q=80',
+      'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80',
+      'https://images.unsplash.com/photo-1515377900963-a1f306189be9?w=600&q=80',
     ],
     location: 'София, Лозенец',
     lat: 42.678,
@@ -173,7 +178,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     review_count: 23,
     created_at: '2024-11-15T10:00:00Z',
     updated_at: '2025-03-20T09:00:00Z',
-    profiles:   { id: 'supplier-1', full_name: 'Мария Николова',  avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Maria' },
+    profiles:   { id: 'supplier-1', full_name: 'Мария Николова',  avatar_url: null },
     categories: { id: 'cat-1', name: 'Масаж', slug: 'massage', icon: '💆' },
   },
   {
@@ -186,7 +191,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     price_type: 'fixed',
     images: [
       'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&q=80',
-      'https://images.unsplash.com/photo-1565992441121-4367a2aaaefe?w=600&q=80',
+      'https://images.unsplash.com/photo-1478700485868-972b69dc3fc4?w=600&q=80',
     ],
     location: 'Банско',
     lat: 41.836,
@@ -196,7 +201,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     review_count: 61,
     created_at: '2024-10-25T10:00:00Z',
     updated_at: '2025-02-15T09:00:00Z',
-    profiles:   { id: 'supplier-2', full_name: 'Георги Стоянов', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Georgi' },
+    profiles:   { id: 'supplier-2', full_name: 'Георги Стоянов', avatar_url: null },
     categories: { id: 'cat-2', name: 'Ски & Сноуборд', slug: 'sports', icon: '⛷️' },
   },
   {
@@ -208,7 +213,8 @@ export const MOCK_SERVICES: (ServiceRow & {
     price: 150,
     price_type: 'fixed',
     images: [
-      'https://images.unsplash.com/photo-1605540436563-5bca919ae766?w=600&q=80',
+      'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600&q=80',
+      'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&q=80',
     ],
     location: 'Банско / Боровец',
     lat: 41.836,
@@ -218,7 +224,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     review_count: 38,
     created_at: '2024-10-28T10:00:00Z',
     updated_at: '2025-03-01T10:00:00Z',
-    profiles:   { id: 'supplier-2', full_name: 'Георги Стоянов', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Georgi' },
+    profiles:   { id: 'supplier-2', full_name: 'Георги Стоянов', avatar_url: null },
     categories: { id: 'cat-2', name: 'Ски & Сноуборд', slug: 'sports', icon: '⛷️' },
   },
   {
@@ -241,7 +247,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     review_count: 19,
     created_at: '2024-12-05T10:00:00Z',
     updated_at: '2025-04-05T11:00:00Z',
-    profiles:   { id: 'supplier-3', full_name: 'Елена Димитрова', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Elena' },
+    profiles:   { id: 'supplier-3', full_name: 'Елена Димитрова', avatar_url: null },
     categories: { id: 'cat-6', name: 'Фотография', slug: 'photography', icon: '📷' },
   },
   {
@@ -253,7 +259,8 @@ export const MOCK_SERVICES: (ServiceRow & {
     price: 250,
     price_type: 'fixed',
     images: [
-      'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80',
+      'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80',
     ],
     location: 'Пловдив',
     lat: 42.135,
@@ -263,7 +270,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     review_count: 31,
     created_at: '2024-12-10T10:00:00Z',
     updated_at: '2025-03-15T12:00:00Z',
-    profiles:   { id: 'supplier-3', full_name: 'Елена Димитрова', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Elena' },
+    profiles:   { id: 'supplier-3', full_name: 'Елена Димитрова', avatar_url: null },
     categories: { id: 'cat-6', name: 'Фотография', slug: 'photography', icon: '📷' },
   },
   {
@@ -286,7 +293,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     review_count: 14,
     created_at: '2025-01-20T10:00:00Z',
     updated_at: '2025-04-12T09:00:00Z',
-    profiles:   { id: 'supplier-4', full_name: 'Петър Иванов',    avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Petar' },
+    profiles:   { id: 'supplier-4', full_name: 'Петър Иванов',    avatar_url: null },
     categories: { id: 'cat-5', name: 'Готвач', slug: 'cooking', icon: '🍳' },
   },
   {
@@ -298,6 +305,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     price: 120,
     price_type: 'fixed',
     images: [
+      'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80',
       'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=600&q=80',
     ],
     location: 'Варна',
@@ -308,7 +316,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     review_count: 9,
     created_at: '2025-02-01T10:00:00Z',
     updated_at: '2025-04-01T10:00:00Z',
-    profiles:   { id: 'supplier-4', full_name: 'Петър Иванов',    avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Petar' },
+    profiles:   { id: 'supplier-4', full_name: 'Петър Иванов',    avatar_url: null },
     categories: { id: 'cat-5', name: 'Готвач', slug: 'cooking', icon: '🍳' },
   },
   {
@@ -321,6 +329,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     price_type: 'fixed',
     images: [
       'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&q=80',
+      'https://images.unsplash.com/photo-1534438327276-14f69011718e?w=600&q=80',
     ],
     location: 'София',
     lat: 42.6977,
@@ -330,7 +339,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     review_count: 52,
     created_at: '2025-02-05T10:00:00Z',
     updated_at: '2025-04-15T10:00:00Z',
-    profiles:   { id: 'supplier-5', full_name: 'Ана Костова',     avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Ana' },
+    profiles:   { id: 'supplier-5', full_name: 'Ана Костова',     avatar_url: null },
     categories: { id: 'cat-9', name: 'Фитнес', slug: 'fitness', icon: '🏋️' },
   },
   {
@@ -342,7 +351,8 @@ export const MOCK_SERVICES: (ServiceRow & {
     price: 200,
     price_type: 'fixed',
     images: [
-      'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80',
+      'https://images.unsplash.com/photo-1521791136064-7986c2920218?w=600&q=80',
+      'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80',
     ],
     location: 'Онлайн',
     lat: null,
@@ -352,7 +362,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     review_count: 28,
     created_at: '2025-03-01T10:00:00Z',
     updated_at: '2025-04-10T10:00:00Z',
-    profiles:   { id: 'supplier-5', full_name: 'Ана Костова',     avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Ana' },
+    profiles:   { id: 'supplier-5', full_name: 'Ана Костова',     avatar_url: null },
     categories: { id: 'cat-9', name: 'Фитнес', slug: 'fitness', icon: '🏋️' },
   },
   {
@@ -364,6 +374,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     price: 65,
     price_type: 'fixed',
     images: [
+      'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80',
       'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80',
     ],
     location: 'София',
@@ -374,7 +385,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     review_count: 18,
     created_at: '2025-01-05T10:00:00Z',
     updated_at: '2025-04-01T11:00:00Z',
-    profiles:   { id: 'supplier-1', full_name: 'Мария Николова',  avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Maria' },
+    profiles:   { id: 'supplier-1', full_name: 'Мария Николова',  avatar_url: null },
     categories: { id: 'cat-4', name: 'Красота', slug: 'beauty', icon: '💅' },
   },
   {
@@ -386,6 +397,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     price: 400,
     price_type: 'negotiable',
     images: [
+      'https://images.unsplash.com/photo-1471341971476-c15e5121a34c?w=600&q=80',
       'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&q=80',
     ],
     location: 'Пловдив / По договаряне',
@@ -396,9 +408,10 @@ export const MOCK_SERVICES: (ServiceRow & {
     review_count: 7,
     created_at: '2025-02-20T10:00:00Z',
     updated_at: '2025-04-08T10:00:00Z',
-    profiles:   { id: 'supplier-3', full_name: 'Елена Димитрова', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Elena' },
+    profiles:   { id: 'supplier-3', full_name: 'Елена Димитрова', avatar_url: null },
     categories: { id: 'cat-6', name: 'Фотография', slug: 'photography', icon: '📷' },
   },
+  ...MOCK_GENERATED_SERVICES,
 ]
 
 /* ─────────────────────────────────────────────────────────────
@@ -421,8 +434,8 @@ export const MOCK_BOOKINGS: (BookingRow & {
     created_at: '2025-05-02T09:00:00Z',
     updated_at: '2025-05-02T10:00:00Z',
     service:  { id: 'svc-1', title: 'Релаксиращ масаж у дома (60 мин.)', images: ['https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80'], price_type: 'fixed' },
-    supplier: { id: 'supplier-1', full_name: 'Мария Николова',  avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Maria' },
-    customer: { id: 'user-customer-1', full_name: 'Иван Петров', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Ivan' },
+    supplier: { id: 'supplier-1', full_name: 'Мария Николова',  avatar_url: null },
+    customer: { id: 'user-customer-1', full_name: 'Иван Петров', avatar_url: null },
   },
   {
     id: 'booking-2',
@@ -436,8 +449,8 @@ export const MOCK_BOOKINGS: (BookingRow & {
     created_at: '2025-04-10T08:00:00Z',
     updated_at: '2025-04-15T14:00:00Z',
     service:  { id: 'svc-3', title: 'Ски урок за начинаещи – Банско (2 часа)', images: ['https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&q=80'], price_type: 'fixed' },
-    supplier: { id: 'supplier-2', full_name: 'Георги Стоянов', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Georgi' },
-    customer: { id: 'user-customer-1', full_name: 'Иван Петров', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Ivan' },
+    supplier: { id: 'supplier-2', full_name: 'Георги Стоянов', avatar_url: null },
+    customer: { id: 'user-customer-1', full_name: 'Иван Петров', avatar_url: null },
   },
   {
     id: 'booking-3',
@@ -451,8 +464,8 @@ export const MOCK_BOOKINGS: (BookingRow & {
     created_at: '2025-05-04T07:00:00Z',
     updated_at: '2025-05-04T07:00:00Z',
     service:  { id: 'svc-9', title: 'Персонална тренировка у вас (60 мин.)', images: ['https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&q=80'], price_type: 'fixed' },
-    supplier: { id: 'supplier-5', full_name: 'Ана Костова', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Ana' },
-    customer: { id: 'user-customer-1', full_name: 'Иван Петров', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Ivan' },
+    supplier: { id: 'supplier-5', full_name: 'Ана Костова', avatar_url: null },
+    customer: { id: 'user-customer-1', full_name: 'Иван Петров', avatar_url: null },
   },
   {
     id: 'booking-4',
@@ -466,8 +479,8 @@ export const MOCK_BOOKINGS: (BookingRow & {
     created_at: '2025-04-08T14:00:00Z',
     updated_at: '2025-04-12T09:00:00Z',
     service:  { id: 'svc-7', title: 'Личен готвач за вечеря (до 8 души)', images: ['https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=600&q=80'], price_type: 'fixed' },
-    supplier: { id: 'supplier-4', full_name: 'Петър Иванов',    avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Petar' },
-    customer: { id: 'user-customer-1', full_name: 'Иван Петров', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Ivan' },
+    supplier: { id: 'supplier-4', full_name: 'Петър Иванов',    avatar_url: null },
+    customer: { id: 'user-customer-1', full_name: 'Иван Петров', avatar_url: null },
   },
 ]
 
@@ -482,42 +495,42 @@ export const MOCK_REVIEWS: (ReviewRow & {
     reviewee_id: 'supplier-2', service_id: 'svc-3', rating: 5,
     comment: 'Георги е невероятен инструктор! За 2 часа се научих да каравам. Много търпелив и мотивиращ. Определено ще се запиша пак!',
     created_at: '2025-04-16T10:00:00Z',
-    reviewer: { id: 'user-customer-1', full_name: 'Иван Петров', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Ivan' },
+    reviewer: { id: 'user-customer-1', full_name: 'Иван Петров', avatar_url: null },
   },
   {
     id: 'rev-2', booking_id: 'b-ext-1', reviewer_id: 'u-ext-1',
     reviewee_id: 'supplier-1', service_id: 'svc-1', rating: 5,
     comment: 'Мария е изключително професионална! Масажът беше перфектен – точно толкова силен, колкото исках. Ще я препоръчам на всички приятели.',
     created_at: '2025-04-20T14:00:00Z',
-    reviewer: { id: 'u-ext-1', full_name: 'Стела Петрова', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Stela' },
+    reviewer: { id: 'u-ext-1', full_name: 'Стела Петрова', avatar_url: null },
   },
   {
     id: 'rev-3', booking_id: 'b-ext-2', reviewer_id: 'u-ext-2',
     reviewee_id: 'supplier-1', service_id: 'svc-1', rating: 5,
     comment: 'Фантастично изживяване! Много релаксиращо и доставчикът е изключително приятен и професионален.',
     created_at: '2025-04-10T11:00:00Z',
-    reviewer: { id: 'u-ext-2', full_name: 'Никола Ангелов', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Nikola' },
+    reviewer: { id: 'u-ext-2', full_name: 'Никола Ангелов', avatar_url: null },
   },
   {
     id: 'rev-4', booking_id: 'b-ext-3', reviewer_id: 'u-ext-3',
     reviewee_id: 'supplier-3', service_id: 'svc-5', rating: 5,
     comment: 'Елена е невероятен фотограф! Снимките от сватбата ни са магически. Всеки детайл е уловен перфектно.',
     created_at: '2025-03-28T15:00:00Z',
-    reviewer: { id: 'u-ext-3', full_name: 'Диана & Христо', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Diana' },
+    reviewer: { id: 'u-ext-3', full_name: 'Диана & Христо', avatar_url: null },
   },
   {
     id: 'rev-5', booking_id: 'b-ext-4', reviewer_id: 'u-ext-4',
     reviewee_id: 'supplier-5', service_id: 'svc-9', rating: 5,
     comment: 'Ана е невероятен треньор! Много мотивираща, вижда слабостите ти и ги работи умело. За 2 месеца с нея резултатите са видими!',
     created_at: '2025-04-30T09:00:00Z',
-    reviewer: { id: 'u-ext-4', full_name: 'Борислав Тодоров', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Borislav' },
+    reviewer: { id: 'u-ext-4', full_name: 'Борислав Тодоров', avatar_url: null },
   },
   {
     id: 'rev-6', booking_id: 'b-ext-5', reviewer_id: 'u-ext-5',
     reviewee_id: 'supplier-4', service_id: 'svc-7', rating: 5,
     comment: 'Петър приготви невероятна вечеря за рождения ден на жена ми. Гостите бяха впечатлени. Меню, атмосфера, вкус – всичко беше перфектно!',
     created_at: '2025-04-18T20:00:00Z',
-    reviewer: { id: 'u-ext-5', full_name: 'Красимир Йорданов', avatar_url: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Krasimir' },
+    reviewer: { id: 'u-ext-5', full_name: 'Красимир Йорданов', avatar_url: null },
   },
 ]
 
