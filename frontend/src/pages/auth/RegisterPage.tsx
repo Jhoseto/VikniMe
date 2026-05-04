@@ -85,7 +85,7 @@ export default function RegisterPage() {
           autoComplete="new-password" placeholder="Поне 8 символа" leftElement={<Lock size={16} />}
           rightElement={
             <button type="button" onClick={() => setShowPassword(p => !p)}
-              className="text-surface-400 hover:text-surface-600" aria-label="Toggle password">
+              className="text-surface-400 hover:text-surface-600" aria-label="Покажи/Скрий паролата">
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           }

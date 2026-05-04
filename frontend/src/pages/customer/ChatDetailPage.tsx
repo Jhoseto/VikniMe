@@ -1,7 +1,7 @@
 ﻿import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { ArrowLeft, Send, Paperclip, MoreVertical, Flag, Ban, X, Image } from 'lucide-react'
+import { ArrowLeft, Send, Paperclip, MoreVertical, Flag, Ban, X, Image, CheckCheck } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import { format } from 'date-fns'
@@ -39,7 +39,7 @@ function ReportMenu({ name, onClose }: { name: string; onClose: () => void }) {
 
   return (
     <motion.div initial={{ opacity: 0, scale: 0.9, y: -8 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: -8 }}
-      className="absolute top-14 right-4 z-30 bg-white rounded-2xl overflow-hidden"
+      className="absolute top-14 right-4 z-50 bg-white rounded-2xl overflow-hidden"
       style={{ boxShadow: 'var(--shadow-card-hover)', minWidth: 200 }}>
       <button onClick={handleReport}
         className="w-full flex items-center gap-3 px-4 py-3 text-sm text-orange-600 hover:bg-orange-50 transition-colors">
@@ -110,7 +110,9 @@ export default function ChatDetailPage() {
       setText('')
       setImagePreview(null)
       qc.invalidateQueries({ queryKey: ['messages', profile?.id, otherUserId] })
+      qc.invalidateQueries({ queryKey: ['chat-list'] })
     },
+    onError: () => toast.error('Съобщението не беше изпратено. Опитай отново.'),
   })
 
   useEffect(() => {
@@ -172,7 +174,7 @@ export default function ChatDetailPage() {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 max-w-2xl mx-auto w-full space-y-2">
         {/* Close menu overlay */}
-        {showMenu && <div className="fixed inset-0 z-20" onClick={() => setShowMenu(false)} />}
+        {showMenu && <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />}
 
         <AnimatePresence initial={false}>
           {messages.map((msg, i) => {
@@ -208,9 +210,9 @@ export default function ChatDetailPage() {
                         {msg.body}
                       </div>
                     )}
-                    <p className={clsx('text-xs text-surface-400', isMine ? 'text-right' : 'text-left')}>
-                      {format(new Date(msg.created_at), 'HH:mm')}
-                      {isMine && <span className="ml-1 text-teal-400">✓✓</span>}
+                    <p className={clsx('text-xs text-surface-400 flex items-center gap-1', isMine ? 'justify-end' : 'justify-start')}>
+                      <span>{format(new Date(msg.created_at), 'HH:mm')}</span>
+                      {isMine && <CheckCheck size={13} className="text-teal-500" aria-label="Прочетено" />}
                     </p>
                   </div>
                 </div>

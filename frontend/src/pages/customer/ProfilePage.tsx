@@ -249,8 +249,6 @@ export default function ProfilePage() {
           </p>
         </motion.div>
       </motion.div>
-
-      <div className="h-24 lg:hidden" />
-    </AnimatedPage>
+      </AnimatedPage>
   )
 }

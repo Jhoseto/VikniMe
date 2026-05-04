@@ -51,31 +51,30 @@ export function ReviewPrompt() {
 
     const candidate = MOCK_BOOKINGS.find(b => {
       if (b.customer_id !== profile.id) return false
-      if (b.status !== 'completed' && b.status !== 'confirmed') return false
+      if (b.status !== 'completed') return false                      // Only truly completed
       if (!b.scheduled_at) return false
       if (new Date(b.scheduled_at) > new Date()) return false
 
-      // Check not already reviewed
       const hasReview = MOCK_REVIEWS.some(r => r.booking_id === b.id && r.reviewer_id === profile.id)
       if (hasReview) return false
 
-      // Check not snoozed
       const until = dismissed[b.id] ?? 0
       if (until > now) return false
 
       return true
     })
 
-    if (candidate) {
-      setPending({
-        bookingId:    candidate.id,
-        serviceTitle: candidate.service.title,
-        serviceImage: candidate.service.images[0] ?? '',
-        supplierName: candidate.supplier.full_name ?? '',
-      })
-      // Delay 2s before showing to let the page settle
-      setTimeout(() => setOpen(true), 2000)
-    }
+    if (!candidate) return
+
+    setPending({
+      bookingId:    candidate.id,
+      serviceTitle: candidate.service.title,
+      serviceImage: candidate.service.images[0] ?? '',
+      supplierName: candidate.supplier.full_name ?? '',
+    })
+    /* Delay 2s before showing — clean up timer on unmount */
+    const t = setTimeout(() => setOpen(true), 2000)
+    return () => clearTimeout(t)
   }, [profile])
 
   function handleSnooze() {

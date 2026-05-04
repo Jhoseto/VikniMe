@@ -56,26 +56,35 @@ export async function apiGetChatList(userId: string): Promise<ChatThread[]> {
 }
 
 /* ── Messages between two users ────────────────────────── */
+/* Aggregates messages across ALL shared bookings between the pair */
 export async function apiGetMessages(userId: string, otherUserId: string): Promise<ChatMessage[]> {
   await delay()
-  const booking = MOCK_BOOKINGS.find(
-    b => (b.customer_id === userId && b.supplier_id === otherUserId) ||
-         (b.supplier_id === userId && b.customer_id === otherUserId)
-  )
-  if (!booking) return []
+  const sharedBookingIds = MOCK_BOOKINGS
+    .filter(
+      b => (b.customer_id === userId && b.supplier_id === otherUserId) ||
+           (b.supplier_id === userId && b.customer_id === otherUserId),
+    )
+    .map(b => b.id)
+
+  if (sharedBookingIds.length === 0) return []
 
   return MOCK_MESSAGES
-    .filter(m => m.booking_id === booking.id)
+    .filter(m => sharedBookingIds.includes(m.booking_id))
     .sort((a, b) => a.created_at.localeCompare(b.created_at)) as ChatMessage[]
 }
 
 /* ── Send a message ─────────────────────────────────────── */
+/* Picks the most recent shared booking as the thread context */
 export async function apiSendMessage(senderId: string, receiverId: string, body: string): Promise<ChatMessage> {
   await delay(250)
-  const booking = MOCK_BOOKINGS.find(
-    b => (b.customer_id === senderId && b.supplier_id === receiverId) ||
-         (b.supplier_id === senderId && b.customer_id === receiverId)
-  )
+  const sharedBookings = MOCK_BOOKINGS
+    .filter(
+      b => (b.customer_id === senderId && b.supplier_id === receiverId) ||
+           (b.supplier_id === senderId && b.customer_id === receiverId),
+    )
+    .sort((a, b) => b.created_at.localeCompare(a.created_at))
+
+  const booking = sharedBookings[0]
   const msg: ChatMessage = {
     id:         `msg-${Date.now()}`,
     booking_id: booking?.id ?? 'no-booking',

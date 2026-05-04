@@ -12,18 +12,37 @@
  *  Exit:  Screen scales down + fades (controlled by AppShell AnimatePresence)
  */
 import { useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useUiStore } from '@/stores/uiStore'
 
-const SPLASH_DURATION = 2400
+const SPLASH_DURATION         = 2400
+const SPLASH_DURATION_REDUCED = 600
 
 export function SplashScreen() {
   const { hideSplash } = useUiStore()
+  const reduced = useReducedMotion()
 
   useEffect(() => {
-    const t = setTimeout(hideSplash, SPLASH_DURATION)
+    const t = setTimeout(hideSplash, reduced ? SPLASH_DURATION_REDUCED : SPLASH_DURATION)
     return () => clearTimeout(t)
-  }, [hideSplash])
+  }, [hideSplash, reduced])
+
+  /* Reduced-motion: instant logo, no shimmer/pulse/progress bar */
+  if (reduced) {
+    return (
+      <motion.div
+        className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, transition: { duration: 0.15 } }}
+        exit={{ opacity: 0, transition: { duration: 0.2 } }}
+      >
+        <img src="/logo.png" alt="vikni.me" className="w-60 sm:w-72 object-contain" draggable={false} />
+        <p className="mt-4 text-[11px] font-semibold tracking-[0.28em] uppercase text-surface-400">
+          Намери специалист
+        </p>
+      </motion.div>
+    )
+  }
 
   return (
     <motion.div

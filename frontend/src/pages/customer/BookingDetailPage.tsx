@@ -73,7 +73,7 @@ function CancelSheet({ open, onClose, onCancel, loading, price }: CancelSheetPro
                 <div className="text-xs text-orange-700 leading-relaxed">
                   <p className="font-semibold mb-1">Политика за връщане на средства</p>
                   <p>• Анулиране до 24 ч. преди услугата → <strong>100% възстановяване</strong></p>
-                  <p>• Анулиране между 24–1 ч. → <strong>50% ({Math.round(price * 0.5)} лв.)</strong></p>
+                  <p>• Анулиране между 24–1 ч. → <strong>50% ({Math.round(price * 0.5)} €)</strong></p>
                   <p>• Анулиране под 1 ч. преди услугата → <strong>без възстановяване</strong></p>
                 </div>
               </div>
@@ -147,7 +147,8 @@ export default function BookingDetailPage() {
 
   const scheduled   = booking.scheduled_at ? new Date(booking.scheduled_at) : null
   const isCustomer  = profile?.id === booking.customer_id
-  const canCancel   = ['pending', 'confirmed'].includes(booking.status)
+  /* Only the customer can cancel via this UI; suppliers manage from their dashboard */
+  const canCancel   = isCustomer && ['pending', 'confirmed'].includes(booking.status)
   const canReview   = booking.status === 'completed' && isCustomer
 
   return (
@@ -204,7 +205,7 @@ export default function BookingDetailPage() {
               <Star size={16} className="text-surface-400 shrink-0" />
               <div>
                 <dt className="text-xs text-surface-400">Цена</dt>
-                <dd className="font-bold text-navy-500">{booking.price} лв.</dd>
+                <dd className="font-bold text-navy-500">{booking.price} €</dd>
               </div>
             </div>
             {booking.notes && (
@@ -253,16 +254,13 @@ export default function BookingDetailPage() {
               Отмени резервацията
             </Button>
           )}
-          <Link to="/chat" className="block">
+          <Link to={`/chat/${isCustomer ? booking.supplier_id : booking.customer_id}`} className="block">
             <Button variant="secondary" fullWidth leftIcon={<MessageCircle size={16} />}>
               Изпрати съобщение
             </Button>
           </Link>
         </div>
       </div>
-
-      <div className="h-24 lg:hidden" />
-
       <CancelSheet
         open={cancelOpen}
         onClose={() => setCancelOpen(false)}

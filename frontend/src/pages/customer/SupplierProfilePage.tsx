@@ -123,22 +123,21 @@ export default function SupplierProfilePage() {
 
         {/* Contact CTA */}
         <div className="flex gap-3 justify-center mt-5">
-          <Link to="/search"
+          <a href="#services"
             className="flex items-center gap-2 px-5 py-2.5 rounded-full text-white font-semibold text-sm hover:opacity-90 transition-opacity"
             style={{ background: 'var(--gradient-brand)' }}>
-            <Calendar size={15} /> Резервирай
-          </Link>
-          <button
-            onClick={() => toast.info('Изпрати съобщение след резервация.')}
+            <Calendar size={15} /> Виж услугите
+          </a>
+          <Link to={`/chat/${profile.id}`}
             className="flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-navy-200 text-navy-600 hover:bg-navy-50 font-semibold text-sm transition-colors">
             <MessageCircle size={15} /> Съобщение
-          </button>
+          </Link>
         </div>
       </div>
 
       {/* ── Services ─────────────────────────────────────── */}
       {services.length > 0 && (
-        <section className="px-4 py-5 max-w-4xl mx-auto">
+        <section id="services" className="px-4 py-5 max-w-4xl mx-auto scroll-mt-20">
           <h2 className="font-display font-bold text-navy-500 text-lg mb-4">Услуги ({services.length})</h2>
           <motion.div variants={staggerContainer} initial="initial" animate="animate"
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -173,9 +172,7 @@ export default function SupplierProfilePage() {
           </motion.div>
         </section>
       )}
-
-      <div className="h-24 lg:hidden" />
-    </AnimatedPage>
+      </AnimatedPage>
   )
 }
 

@@ -49,7 +49,7 @@ export default function LoginPage() {
       setProfile(profile)
       setInitialized(true)
       toast.success('Добре дошъл!')
-      navigate('/', { replace: true })
+      navigate(from, { replace: true })
     } catch {
       toast.error('Грешка при вход с ' + provider)
     } finally {

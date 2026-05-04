@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { format } from 'date-fns'
 import { bg } from 'date-fns/locale'
@@ -83,7 +83,7 @@ export default function AdminBookingsPage() {
       accessorKey: 'price',
       header: 'Цена',
       cell: ({ row }: CellContext<BookingRow, unknown>) => (
-        <span className="font-semibold text-sm text-navy-500">{row.original.price} лв.</span>
+        <span className="font-semibold text-sm text-navy-500">{row.original.price} €</span>
       ),
     },
     {

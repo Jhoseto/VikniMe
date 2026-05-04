@@ -62,7 +62,7 @@ function BookingCard({ booking }: { booking: BookingWithRelations }) {
               {format(scheduled, 'dd MMM yyyy, HH:mm', { locale: bg })}
             </p>
           )}
-          <p className="text-sm font-bold text-navy-500 mt-1">{booking.price} лв.</p>
+          <p className="text-sm font-bold text-navy-500 mt-1">{booking.price} €</p>
         </div>
         <Link to={`/bookings/${booking.id}`} className="text-surface-300 hover:text-surface-500 transition-colors shrink-0 mt-1">
           <ChevronRight size={16} />
@@ -140,8 +140,6 @@ export default function SupplierBookingsPage() {
           </motion.div>
         )}
       </div>
-
-      <div className="h-24 lg:hidden" />
-    </AnimatedPage>
+      </AnimatedPage>
   )
 }

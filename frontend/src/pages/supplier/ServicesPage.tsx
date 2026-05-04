@@ -47,7 +47,7 @@ function ServiceRow({ service }: { service: ServiceWithRelations }) {
               <Star size={12} className="text-orange-400 fill-orange-400" />
               <span className="text-xs text-surface-500">{service.avg_rating.toFixed(1)} ({service.review_count})</span>
             </div>
-            <span className="text-xs font-bold text-navy-500">{service.price} лв.</span>
+            <span className="text-xs font-bold text-navy-500">{service.price} €</span>
           </div>
         </div>
         <div className="flex items-center gap-2 mt-2">
@@ -130,8 +130,6 @@ export default function SupplierServicesPage() {
           </>
         )}
       </div>
-
-      <div className="h-24 lg:hidden" />
-    </AnimatedPage>
+      </AnimatedPage>
   )
 }

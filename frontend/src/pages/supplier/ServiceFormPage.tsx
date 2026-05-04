@@ -14,16 +14,22 @@ import { Button } from '@/components/ui/Button'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
 import { ImageUploadZone } from '@/components/shared/ImageUploadZone'
 import { clsx } from 'clsx'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAvailabilityStore } from '@/stores/availabilityStore'
 
 const schema = z.object({
   title:       z.string().min(5, 'Поне 5 символа').max(100),
   description: z.string().min(20, 'Поне 20 символа').max(1000),
   category_id: z.string().min(1, 'Избери категория'),
-  price:       z.string().refine(v => !isNaN(Number(v)) && Number(v) > 0, 'Въведи валидна цена'),
+  price:       z.string(),
   price_type:  z.enum(['fixed', 'hourly', 'negotiable']),
   location:    z.string().min(2, 'Въведи локация'),
+}).superRefine((data, ctx) => {
+  if (data.price_type !== 'negotiable') {
+    if (isNaN(Number(data.price)) || Number(data.price) <= 0) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['price'], message: 'Въведи валидна цена' })
+    }
+  }
 })
 type FormData = z.infer<typeof schema>
 
@@ -53,23 +59,34 @@ export default function ServiceFormPage() {
     return () => window.removeEventListener('beforeunload', handler)
   }, [isDirty])
 
+  const qc = useQueryClient()
   const { data: existing } = useQuery({
     queryKey: ['service', id],
     queryFn:  () => apiGetServiceById(id!),
     enabled:  isEdit,
   })
 
-  const { register, handleSubmit, control, watch, formState: { errors, isSubmitting } } = useForm<FormData>({
+  const { register, handleSubmit, control, watch, reset, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      title:       existing?.title       ?? '',
-      description: existing?.description ?? '',
-      category_id: existing?.category_id ?? '',
-      price:       String(existing?.price ?? ''),
-      price_type:  (existing?.price_type as FormData['price_type']) ?? 'fixed',
-      location:    existing?.location    ?? '',
+      title: '', description: '', category_id: '',
+      price: '', price_type: 'fixed', location: '',
     },
   })
+
+  /* Hydrate form when existing service finishes loading */
+  useEffect(() => {
+    if (existing) {
+      reset({
+        title:       existing.title       ?? '',
+        description: existing.description ?? '',
+        category_id: existing.category_id ?? '',
+        price:       String(existing.price ?? ''),
+        price_type:  (existing.price_type as FormData['price_type']) ?? 'fixed',
+        location:    existing.location    ?? '',
+      })
+    }
+  }, [existing, reset])
 
   const priceType = watch('price_type')
 
@@ -80,8 +97,26 @@ export default function ServiceFormPage() {
     await new Promise(r => setTimeout(r, 600))
     const category = MOCK_CATEGORIES.find(c => c.id === data.category_id)
 
+    const priceNum = data.price_type === 'negotiable' ? 0 : Number(data.price)
+
     if (isEdit && existing) {
-      Object.assign(existing, { ...data, images: images.length ? images : existing.images, updated_at: new Date().toISOString() })
+      const idx = MOCK_SERVICES.findIndex(s => s.id === existing.id)
+      if (idx >= 0) {
+        MOCK_SERVICES[idx] = {
+          ...MOCK_SERVICES[idx],
+          title:       data.title,
+          description: data.description,
+          category_id: data.category_id,
+          price:       priceNum,
+          price_type:  data.price_type,
+          location:    data.location,
+          images:      images.length ? images : MOCK_SERVICES[idx].images,
+          updated_at:  new Date().toISOString(),
+          categories:  category ?? MOCK_SERVICES[idx].categories,
+        }
+        qc.invalidateQueries({ queryKey: ['service', existing.id] })
+        qc.invalidateQueries({ queryKey: ['services'] })
+      }
       toast.success('Услугата е обновена!')
     } else {
       const newService = {
@@ -90,7 +125,7 @@ export default function ServiceFormPage() {
         category_id:   data.category_id,
         title:         data.title,
         description:   data.description,
-        price:         Number(data.price),
+        price:         priceNum,
         price_type:    data.price_type,
         location:      data.location,
         images:        images.length ? images : ['https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400'],
@@ -100,8 +135,9 @@ export default function ServiceFormPage() {
         updated_at:    new Date().toISOString(),
         categories:    category ?? null,
         profiles:      { id: profile.id, full_name: profile.full_name, avatar_url: profile.avatar_url },
-      } as any
+      } as unknown as typeof MOCK_SERVICES[number]
       MOCK_SERVICES.push(newService)
+      qc.invalidateQueries({ queryKey: ['services'] })
       toast.success('Услугата е публикувана!')
     }
     navigate('/supplier/services')

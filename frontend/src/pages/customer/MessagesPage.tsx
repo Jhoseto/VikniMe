@@ -1,4 +1,4 @@
-/**
+﻿/**
  * MessagesPage – desktop split-view for messages.
  * On desktop (lg+): left panel = thread list, right panel = chat detail.
  * On mobile: this page is just the thread list; ChatDetailPage is a separate route.
@@ -11,6 +11,7 @@ import { Helmet } from 'react-helmet-async'
 import { format } from 'date-fns'
 import { bg } from 'date-fns/locale'
 import { Link } from 'react-router-dom'
+import { toast } from 'sonner'
 import { apiGetChatList, type ChatThread } from '@/api/messages'
 import { useAuthStore } from '@/stores/authStore'
 import { Avatar } from '@/components/ui/Avatar'
@@ -51,7 +52,12 @@ function DesktopChatPanel({ otherUserId }: { otherUserId: string }) {
 
   const send = useMutation({
     mutationFn: (body: string) => apiSendMessage(profile!.id, otherUserId, body),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['messages'] }); setInput('') },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['messages'] })
+      qc.invalidateQueries({ queryKey: ['chat-list'] })
+      setInput('')
+    },
+    onError: () => toast.error('Съобщението не беше изпратено.'),
   })
 
   const handleSend = () => {
@@ -60,12 +66,18 @@ function DesktopChatPanel({ otherUserId }: { otherUserId: string }) {
 
   if (!otherUserId) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center gap-3">
+      <div className="flex-1 flex flex-col items-center justify-center gap-3 px-6 text-center">
         <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-md"
           style={{ background: 'linear-gradient(135deg,#7C4DCC 0%,#2DD4BF 100%)' }}>
           <MessageCircle size={28} strokeWidth={1.75} className="text-white" />
         </div>
-        <p className="font-semibold text-surface-500 text-sm">Избери разговор</p>
+        <p className="font-semibold text-surface-700 text-base">Избери разговор</p>
+        <p className="text-surface-400 text-sm max-w-xs">Започни нов чат след резервация на услуга.</p>
+        <Link to="/search"
+          className="mt-2 px-5 py-2.5 rounded-full text-white font-semibold text-sm shadow-md hover:opacity-90"
+          style={{ background: 'var(--gradient-brand)' }}>
+          Намери услуга
+        </Link>
       </div>
     )
   }
@@ -105,6 +117,7 @@ function DesktopChatPanel({ otherUserId }: { otherUserId: string }) {
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() } }}
           placeholder="Напиши съобщение..."
           rows={1}
+          aria-label="Съобщение"
           className="flex-1 resize-none py-2.5 px-3.5 rounded-2xl border border-surface-200 text-sm outline-none focus:border-navy-400 focus:ring-2 focus:ring-navy-100 transition-colors max-h-28 leading-relaxed"
         />
         <button onClick={handleSend} disabled={!input.trim() || send.isPending}
@@ -230,9 +243,7 @@ export default function MessagesPage() {
         {/* Right panel */}
         <DesktopChatPanel otherUserId={selectedId ?? ''} />
       </div>
-
-      <div className="h-24 lg:hidden" />
-    </AnimatedPage>
+      </AnimatedPage>
   )
 }
 

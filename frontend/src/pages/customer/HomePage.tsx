@@ -165,10 +165,10 @@ export default function HomePage() {
 
         {/* ── Hero ─────────────────────────────────────────── */}
         <section className="relative overflow-hidden">
-          <div className="flex flex-col lg:flex-row" style={{ minHeight: 'min(90vh, 680px)' }}>
+          <div className="flex flex-col lg:flex-row lg:[min-height:min(90vh,680px)]">
 
             {/* ── LEFT: Content panel ─────────────────────── */}
-            <div className="relative flex-1 lg:w-[56%] flex flex-col justify-center px-6 py-14 lg:px-14 lg:py-20 safe-top"
+            <div className="relative flex-1 lg:w-[56%] flex flex-col justify-center px-5 pt-9 pb-12 lg:px-14 lg:py-20 safe-top"
               style={{ background: 'linear-gradient(140deg, #080f24 0%, #101d48 50%, #1a1155 100%)' }}>
 
               {/* Mesh dot texture */}
@@ -196,8 +196,8 @@ export default function HomePage() {
 
                 {/* Headline */}
                 <motion.h1 initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0, transition: { delay: 0.07 } }}
-                  className="font-display font-black leading-[1.08] mb-6"
-                  style={{ fontSize: 'clamp(2.4rem, 5vw, 3.6rem)' }}>
+                  className="font-display font-black leading-[1.08] mb-5"
+                  style={{ fontSize: 'clamp(1.85rem, 5.5vw, 3.4rem)' }}>
                   <span className="text-white">Намери </span>
                   <span style={{
                     background: 'linear-gradient(90deg, #E8581F 0%, #F9A325 45%, #2DD4BF 100%)',
@@ -209,8 +209,8 @@ export default function HomePage() {
 
                 {/* Subtitle */}
                 <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0, transition: { delay: 0.14 } }}
-                  className="text-white/50 text-base lg:text-lg mb-8 leading-relaxed">
-                  Масажисти, фотографи, готвачи, треньори — резервирай онлайн, плати сигурно. Без стрес.
+                  className="text-white/50 text-sm lg:text-lg mb-7 leading-relaxed">
+                  Масажисти, фотографи, готвачи, треньори — резервирай онлайн, плати сигурно.
                 </motion.p>
 
                 {/* Search button */}
@@ -235,15 +235,15 @@ export default function HomePage() {
 
                 {/* Trust stats */}
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: 0.3 } }}
-                  className="flex items-start gap-8 flex-wrap">
+                  className="grid grid-cols-3 gap-3 lg:flex lg:gap-8">
                   {[
                     { value: '2 400+', label: 'специалисти' },
                     { value: '18 000+', label: 'резервации' },
-                    { value: '4.9★', label: 'среден рейтинг' },
+                    { value: '4.9★', label: 'рейтинг' },
                   ].map(({ value, label }) => (
                     <div key={label}>
-                      <p className="font-display font-black text-white text-2xl leading-none">{value}</p>
-                      <p className="text-white/40 text-xs mt-1 font-medium">{label}</p>
+                      <p className="font-display font-black text-white text-lg lg:text-2xl leading-none">{value}</p>
+                      <p className="text-white/40 text-[10px] lg:text-xs mt-1 font-medium">{label}</p>
                     </div>
                   ))}
                 </motion.div>
@@ -326,7 +326,7 @@ export default function HomePage() {
                     ))}
                     <span className="text-xs font-bold text-surface-700 ml-1">4.97</span>
                   </div>
-                  <span className="text-xs font-bold" style={{ color: '#1B2A5E' }}>80 лв/ч</span>
+                  <span className="text-xs font-bold" style={{ color: '#1B2A5E' }}>80 €/ч</span>
                 </div>
                 <button className="mt-2.5 w-full py-1.5 rounded-xl text-white text-xs font-bold transition-opacity hover:opacity-90"
                   style={{ background: 'linear-gradient(135deg,#7C4DCC,#2DD4BF)' }}>
@@ -364,17 +364,20 @@ export default function HomePage() {
             </div>
 
             {catLoading ? (
-              <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
+              <div className="flex gap-2.5 overflow-x-auto scrollbar-hide -mx-4 px-4 lg:mx-0 lg:px-0">
                 {Array.from({ length: 10 }).map((_, i) => (
-                  <div key={i} className="skeleton h-[88px] rounded-2xl" />
+                  <div key={i} className="skeleton h-[92px] w-[78px] lg:w-auto lg:flex-1 rounded-2xl shrink-0" />
                 ))}
               </div>
             ) : (
+              /* Mobile: horizontal scroll. Desktop ≥lg: equal-width grid in 1 row */
               <motion.div variants={staggerContainer} initial="initial" animate="animate"
-                className="grid gap-2"
-                style={{ gridTemplateColumns: `repeat(${categories.length}, minmax(0, 1fr))` }}>
+                className="flex gap-2.5 overflow-x-auto scrollbar-hide -mx-4 px-4 pb-2 lg:grid lg:gap-2 lg:overflow-visible lg:mx-0 lg:px-0 lg:pb-0"
+                style={{ gridTemplateColumns: `repeat(${categories.length}, minmax(0, 1fr))` }}
+              >
                 {categories.map(cat => (
-                  <motion.div key={cat.id} variants={staggerItem}>
+                  <motion.div key={cat.id} variants={staggerItem}
+                    className="shrink-0 w-[78px] lg:w-auto">
                     <CategoryCard cat={cat} />
                   </motion.div>
                 ))}

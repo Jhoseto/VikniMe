@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom'
+﻿import { Link } from 'react-router-dom'
 import { MapPin, Star, Heart } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { useState } from 'react'
 import { clsx } from 'clsx'
 import type { ServiceRow } from '@/types/database'
+import { useFavoritesStore } from '@/stores/favoritesStore'
+import { useHaptic } from '@/hooks/useHaptic'
 
 type Service = ServiceRow & {
   profiles?: { full_name: string | null; avatar_url: string | null } | null
@@ -16,14 +17,16 @@ interface ServiceCardProps {
 }
 
 const priceLabel: Record<string, string> = {
-  fixed:      'лв.',
-  hourly:     'лв./ч.',
+  fixed:      '€',
+  hourly:     '€/ч.',
   negotiable: 'по договаряне',
 }
 
 export function ServiceCard({ service, className }: ServiceCardProps) {
   const image = service.images?.[0]
-  const [liked, setLiked] = useState(false)
+  const liked = useFavoritesStore(s => s.has(service.id))
+  const toggleFav = useFavoritesStore(s => s.toggle)
+  const { trigger } = useHaptic()
 
   const price = service.price_type === 'negotiable'
     ? 'По договаряне'
@@ -65,16 +68,20 @@ export function ServiceCard({ service, className }: ServiceCardProps) {
             </span>
           )}
 
-          {/* Favourite button */}
+          {/* Favourite button — 44×44 touch target with smaller visual */}
           <button
-            onClick={e => { e.preventDefault(); setLiked(l => !l) }}
+            type="button"
+            onClick={e => { e.preventDefault(); e.stopPropagation(); toggleFav(service.id); trigger('light') }}
             aria-label={liked ? 'Премахни от любими' : 'Добави в любими'}
-            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center shadow-sm transition-transform active:scale-90"
+            aria-pressed={liked}
+            className="absolute top-2 right-2 w-11 h-11 flex items-center justify-center rounded-full transition-transform active:scale-90"
           >
-            <Heart
-              size={14}
-              className={clsx('transition-colors', liked ? 'fill-red-500 text-red-500' : 'text-surface-400')}
-            />
+            <span className="w-9 h-9 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center shadow-sm">
+              <Heart
+                size={15}
+                className={clsx('transition-colors', liked ? 'fill-red-500 text-red-500' : 'text-surface-400')}
+              />
+            </span>
           </button>
         </div>
 

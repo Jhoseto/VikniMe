@@ -79,7 +79,7 @@ function BookingCard({ booking }: { booking: BookingWithRelations }) {
         {/* Status + price */}
         <div className="flex flex-col items-end gap-1.5 shrink-0">
           <Badge variant={STATUS_BADGE[booking.status]}>{STATUS_LABEL[booking.status]}</Badge>
-          <span className="text-sm font-bold text-navy-500">{booking.price} лв.</span>
+          <span className="text-sm font-bold text-navy-500">{booking.price} €</span>
           <ChevronRight size={16} className="text-surface-300 group-hover:text-surface-500 transition-colors" />
         </div>
       </Link>
@@ -172,8 +172,6 @@ export default function BookingsPage() {
           </motion.div>
         )}
       </div>
-
-      <div className="h-24 lg:hidden" />
-    </AnimatedPage>
+      </AnimatedPage>
   )
 }

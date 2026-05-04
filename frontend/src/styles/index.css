@@ -209,8 +209,16 @@ h1, h2, h3, h4, h5, h6 {
 ::-webkit-scrollbar-thumb:hover { background: var(--color-surface-400); }
 
 /* Hide scrollbar but keep scroll functionality */
-.scrollbar-hide::-webkit-scrollbar { display: none; }
-.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-hide,
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Prevent tap highlight flash on iOS / Android */
+button, a, [role="button"] { -webkit-tap-highlight-color: transparent; }
+
+/* Disable iOS double-tap to zoom on UI controls */
+button, [role="button"], a { touch-action: manipulation; }
 
 /* ── Page Transitions ─────────────────────────────────── */
 @keyframes page-in {

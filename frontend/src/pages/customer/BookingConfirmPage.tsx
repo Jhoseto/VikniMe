@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Booking Confirmation page – /bookings/:id/confirm
  *
  * Stripe payment flow:
@@ -13,8 +13,8 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
-import { ArrowLeft, CreditCard, Shield, CheckCircle, Coins, Zap, Share2 } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowLeft, CreditCard, Shield, CheckCircle, Coins, Zap, Share2, AlertTriangle } from 'lucide-react'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import { format } from 'date-fns'
 import { bg } from 'date-fns/locale'
@@ -29,6 +29,8 @@ import { Button } from '@/components/ui/Button'
 
 /* ── Confetti burst ──────────────────────────────────────── */
 function Confetti() {
+  const reduced = useReducedMotion()
+  if (reduced) return null
   const colors = ['#8B5CF6', '#2DD4BF', '#F97316', '#1B2A5E', '#F5A623', '#EC4899']
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
@@ -157,19 +159,19 @@ function PaymentForm({ booking, onSuccess }: PayFormProps) {
       <div className="p-4 rounded-2xl bg-white border border-surface-200 space-y-2.5" style={{ boxShadow: 'var(--shadow-card)' }}>
         <div className="flex justify-between text-sm">
           <span className="text-surface-600">Цена на услугата</span>
-          <span className="font-medium">{booking.price} лв.</span>
+          <span className="font-medium">{booking.price} €</span>
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-surface-600">Такса платформа (5%)</span>
-          <span className="font-medium">{PLATFORM_FEE} лв.</span>
+          <span className="font-medium">{PLATFORM_FEE} €</span>
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-surface-600">ДДС (20%)</span>
-          <span className="font-medium">{VAT} лв.</span>
+          <span className="font-medium">{VAT} €</span>
         </div>
         <div className="border-t border-surface-100 pt-2 flex justify-between">
           <span className="font-bold text-surface-800">Общо</span>
-          <span className="font-bold text-lg text-navy-500">{total.toFixed(2)} лв.</span>
+          <span className="font-bold text-lg text-navy-500">{total.toFixed(2)} €</span>
         </div>
       </div>
 
@@ -261,7 +263,7 @@ function PaymentForm({ booking, onSuccess }: PayFormProps) {
       </div>
 
       <Button onClick={handlePay} loading={loading} className="w-full h-14 text-base">
-        Плати {total.toFixed(2)} лв.
+        Плати {total.toFixed(2)} €
       </Button>
     </div>
   )
@@ -271,10 +273,41 @@ function PaymentForm({ booking, onSuccess }: PayFormProps) {
 export default function BookingConfirmPage() {
   const { id = '' } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { profile } = useAuthStore()
   const [paid, setPaid] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
 
-  const booking = MOCK_BOOKINGS.find(b => b.id === id) ?? MOCK_BOOKINGS[0]
+  const booking = MOCK_BOOKINGS.find(b => b.id === id)
+
+  /* Guard: invalid booking, foreign customer, already-paid status */
+  if (!booking) {
+    return (
+      <AnimatedPage className="min-h-screen bg-surface-50 flex items-center justify-center px-4">
+        <div className="text-center max-w-sm">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-orange-100 text-orange-500 flex items-center justify-center">
+            <AlertTriangle size={28} />
+          </div>
+          <h2 className="font-display font-bold text-navy-600 text-lg mb-2">Резервацията не е намерена</h2>
+          <p className="text-surface-500 text-sm mb-5">Линкът е невалиден или резервацията е изтрита.</p>
+          <Button onClick={() => navigate('/bookings')}>Към резервациите</Button>
+        </div>
+      </AnimatedPage>
+    )
+  }
+  if (profile && booking.customer_id !== profile.id && profile.role !== 'admin') {
+    return (
+      <AnimatedPage className="min-h-screen bg-surface-50 flex items-center justify-center px-4">
+        <div className="text-center max-w-sm">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-red-100 text-red-500 flex items-center justify-center">
+            <Shield size={28} />
+          </div>
+          <h2 className="font-display font-bold text-navy-600 text-lg mb-2">Нямаш достъп</h2>
+          <p className="text-surface-500 text-sm mb-5">Тази резервация не е твоя.</p>
+          <Button onClick={() => navigate('/bookings')}>Към резервациите</Button>
+        </div>
+      </AnimatedPage>
+    )
+  }
 
   function handleSuccess() {
     setShowConfetti(true)

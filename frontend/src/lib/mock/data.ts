@@ -208,7 +208,7 @@ export const MOCK_SERVICES: (ServiceRow & {
     price: 150,
     price_type: 'fixed',
     images: [
-      'https://images.unsplash.com/photo-1548133664-bf15d7640cac?w=600&q=80',
+      'https://images.unsplash.com/photo-1605540436563-5bca919ae766?w=600&q=80',
     ],
     location: 'Банско / Боровец',
     lat: 41.836,

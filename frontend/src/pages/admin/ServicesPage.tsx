@@ -41,7 +41,7 @@ export default function AdminServicesPage() {
     {
       header: 'Цена',
       accessorKey: 'price',
-      cell: ({ row }: CellContext<ServiceWithRelations, unknown>) => <span className="font-semibold text-navy-500">{row.original.price} лв.</span>,
+      cell: ({ row }: CellContext<ServiceWithRelations, unknown>) => <span className="font-semibold text-navy-500">{row.original.price} €</span>,
     },
     {
       header: 'Рейтинг',

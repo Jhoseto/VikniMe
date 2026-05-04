@@ -59,8 +59,8 @@ export default function AdminDashboardPage() {
           className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard label="Потребители"  value={totalUsers}    icon={<Users size={22} />}       to="/admin/users"    color="var(--gradient-primary)" />
           <StatCard label="Услуги"       value={totalServices} icon={<Briefcase size={22} />}   to="/admin/services" color="var(--gradient-brand)" />
-          <StatCard label="Резервации"   value={totalBookings} icon={<CalendarDays size={22} />} to="/admin/services" color="var(--gradient-energy)" />
-          <StatCard label="Приходи (комис.)" value={`${totalRevenue.toFixed(0)} лв.`} icon={<TrendingUp size={22} />} to="/admin" color="linear-gradient(135deg,#10B981,#059669)" />
+          <StatCard label="Резервации"   value={totalBookings} icon={<CalendarDays size={22} />} to="/admin/bookings" color="var(--gradient-energy)" />
+          <StatCard label="Приходи (комис.)" value={`${totalRevenue.toFixed(0)} €`} icon={<TrendingUp size={22} />} to="/admin" color="linear-gradient(135deg,#10B981,#059669)" />
         </motion.div>
 
         {/* Quick info */}
@@ -116,7 +116,7 @@ export default function AdminDashboardPage() {
                     <p className="text-sm font-medium text-surface-800 truncate">{b.service.title}</p>
                     <p className="text-xs text-surface-400">{b.customer.full_name} → {b.supplier.full_name}</p>
                   </div>
-                  <span className="font-bold text-navy-500 shrink-0">{b.price} лв.</span>
+                  <span className="font-bold text-navy-500 shrink-0">{b.price} €</span>
                   <Badge variant="warning">Чакащ</Badge>
                   <ChevronRight size={14} className="text-surface-300 shrink-0" />
                 </Link>

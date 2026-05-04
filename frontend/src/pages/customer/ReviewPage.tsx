@@ -1,7 +1,7 @@
 ﻿import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { ArrowLeft, Star } from 'lucide-react'
+import { ArrowLeft, Star, AlertTriangle } from 'lucide-react'
 import { Helmet } from 'react-helmet-async'
 import { toast } from 'sonner'
 import { apiGetBookingById } from '@/api/bookings'
@@ -9,6 +9,7 @@ import { apiCreateReview } from '@/api/reviews'
 import { useAuthStore } from '@/stores/authStore'
 import { Button } from '@/components/ui/Button'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { Skeleton } from '@/components/ui/Skeleton'
 import { clsx } from 'clsx'
 
 const RATINGS = [1, 2, 3, 4, 5]
@@ -23,15 +24,18 @@ export default function ReviewPage() {
   const [hovered, setHovered] = useState(0)
   const [comment, setComment] = useState('')
 
-  const { data: booking } = useQuery({
+  const { data: booking, isLoading, isError } = useQuery({
     queryKey: ['booking', id],
     queryFn:  () => apiGetBookingById(id),
+    enabled:  !!id,
   })
 
   const { mutate: submit, isPending } = useMutation({
     mutationFn: () => apiCreateReview({
       service_id:  booking!.service_id,
       reviewer_id: profile!.id,
+      reviewee_id: booking!.supplier_id,
+      booking_id:  booking!.id,
       rating,
       comment: comment.trim() || null,
     }),
@@ -43,7 +47,50 @@ export default function ReviewPage() {
     onError: () => toast.error('Грешка при изпращане.'),
   })
 
-  if (!booking) return null
+  /* Loading state */
+  if (isLoading) {
+    return (
+      <AnimatedPage className="min-h-screen bg-surface-50">
+        <div className="bg-white border-b border-surface-100 sticky top-0 z-20 safe-top">
+          <div className="max-w-xl mx-auto px-4 h-14 flex items-center gap-3">
+            <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-surface-100" aria-label="Назад">
+              <ArrowLeft size={20} className="text-surface-600" />
+            </button>
+            <h1 className="font-display font-bold text-navy-500">Остави отзив</h1>
+          </div>
+        </div>
+        <div className="max-w-xl mx-auto px-4 py-8 space-y-6">
+          <Skeleton className="h-6 w-3/4 mx-auto" />
+          <Skeleton className="h-12 w-64 mx-auto" />
+          <Skeleton className="h-32" />
+        </div>
+      </AnimatedPage>
+    )
+  }
+
+  /* Error / not found / wrong customer / not completed */
+  const wrongCustomer = booking && profile && booking.customer_id !== profile.id
+  const notCompleted  = booking && booking.status !== 'completed'
+
+  if (isError || !booking || wrongCustomer || notCompleted) {
+    const msg = wrongCustomer
+      ? 'Тази резервация не е твоя.'
+      : notCompleted
+      ? 'Можеш да оставиш отзив едва след като услугата приключи.'
+      : 'Резервацията не е намерена.'
+    return (
+      <AnimatedPage className="min-h-screen bg-surface-50 flex items-center justify-center px-4">
+        <div className="text-center max-w-sm">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-orange-100 text-orange-500 flex items-center justify-center">
+            <AlertTriangle size={28} />
+          </div>
+          <h2 className="font-display font-bold text-navy-600 text-lg mb-2">Не може да се остави отзив</h2>
+          <p className="text-surface-500 text-sm mb-5">{msg}</p>
+          <Button onClick={() => navigate('/bookings')}>Към резервациите</Button>
+        </div>
+      </AnimatedPage>
+    )
+  }
 
   const displayed = hovered || rating
 

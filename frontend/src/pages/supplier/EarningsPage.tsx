@@ -46,15 +46,15 @@ export default function SupplierEarningsPage() {
         {/* Summary card */}
         <div className="rounded-2xl p-6 text-white" style={{ background: 'var(--gradient-primary)' }}>
           <p className="text-white/70 text-sm mb-1">Общо нетни приходи</p>
-          <p className="font-display font-black text-4xl mb-4">{netEarnings} лв.</p>
+          <p className="font-display font-black text-4xl mb-4">{netEarnings} €</p>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
               <p className="text-white/60">Брутни</p>
-              <p className="font-bold">{totalGross} лв.</p>
+              <p className="font-bold">{totalGross} €</p>
             </div>
             <div>
               <p className="text-white/60">Такса платформа (10%)</p>
-              <p className="font-bold">-{platformFee} лв.</p>
+              <p className="font-bold">-{platformFee} €</p>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@ export default function SupplierEarningsPage() {
         <div className="bg-white rounded-2xl p-5 flex items-center justify-between" style={{ boxShadow: 'var(--shadow-card)' }}>
           <div>
             <p className="text-xs text-surface-400 mb-1">Чакащо изплащане</p>
-            <p className="font-display font-black text-2xl text-navy-500">{pendingPayout} лв.</p>
+            <p className="font-display font-black text-2xl text-navy-500">{pendingPayout} €</p>
           </div>
           <Button leftIcon={<Banknote size={15} />} onClick={() => toast.info('IBAN изплащане – предстои интеграция')}>
             Изтегли
@@ -105,7 +105,7 @@ export default function SupplierEarningsPage() {
                     <p className="text-xs text-surface-400">{b.scheduled_at ? format(new Date(b.scheduled_at), 'd MMM yyyy', { locale: bg }) : '—'}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="font-bold text-sm text-green-600">+{Math.round(b.price * 0.9)} лв.</p>
+                    <p className="font-bold text-sm text-green-600">+{Math.round(b.price * 0.9)} €</p>
                     <p className="text-xs text-surface-400">след такса</p>
                   </div>
                 </motion.div>

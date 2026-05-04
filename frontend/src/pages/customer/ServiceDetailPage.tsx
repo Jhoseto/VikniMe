@@ -16,6 +16,8 @@ import { apiGetServiceById, type ServiceWithRelations } from '@/api/services'
 import { apiGetReviewsForService, type ReviewWithReviewer } from '@/api/reviews'
 import { apiCreateBooking } from '@/api/bookings'
 import { useAuthStore } from '@/stores/authStore'
+import { useFavoritesStore } from '@/stores/favoritesStore'
+import { useHaptic } from '@/hooks/useHaptic'
 import { MOCK_BOOKINGS } from '@/lib/mock/data'
 import { Avatar } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
@@ -38,7 +40,7 @@ function getBookedSlotsForDate(serviceId: string, dateStr: string): string[] {
 }
 
 /* ─── Price label ────────────────────────────────────────── */
-const priceLabel = { fixed: 'лв.', hourly: 'лв./ч.', negotiable: '' }
+const priceLabel = { fixed: '€', hourly: '€/ч.', negotiable: '' }
 
 /* ─── Image Gallery ──────────────────────────────────────── */
 function ImageGallery({ images, title }: { images: string[]; title: string }) {
@@ -232,6 +234,9 @@ function ReviewCard({ review }: { review: ReviewWithReviewer }) {
 export default function ServiceDetailPage() {
   const { id = '' } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const liked = useFavoritesStore(s => s.has(id))
+  const toggleFav = useFavoritesStore(s => s.toggle)
+  const { trigger } = useHaptic()
 
   const { data: service, isLoading } = useQuery<ServiceWithRelations | null>({
     queryKey: ['service', id],
@@ -286,8 +291,11 @@ export default function ServiceDetailPage() {
               <Share2 size={16} />
             </button>
             <button
-              className="w-9 h-9 bg-black/40 hover:bg-black/60 rounded-full flex items-center justify-center text-white backdrop-blur-sm transition-colors" aria-label="Запази">
-              <Heart size={16} />
+              onClick={() => { toggleFav(id); trigger('light') }}
+              aria-label={liked ? 'Премахни от любими' : 'Добави в любими'}
+              aria-pressed={liked}
+              className="w-9 h-9 bg-black/40 hover:bg-black/60 rounded-full flex items-center justify-center text-white backdrop-blur-sm transition-colors">
+              <Heart size={16} className={clsx(liked && 'fill-red-500 text-red-500')} />
             </button>
           </div>
         </div>
@@ -427,9 +435,7 @@ export default function ServiceDetailPage() {
           </div>
         </div>
       </div>
-
-      <div className="h-24 lg:hidden" />
-    </AnimatedPage>
+      </AnimatedPage>
   )
 }
 

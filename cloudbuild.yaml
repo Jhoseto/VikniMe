@@ -1,0 +1,54 @@
+# Google Cloud Build — builds and deploys to Cloud Run
+# Usage: gcloud builds submit --config cloudbuild.yaml
+#
+# Required substitutions (set in Cloud Console or via --substitutions flag):
+#   _PROJECT_ID  — your GCP project ID
+#   _REGION      — e.g. europe-west1
+#   _SERVICE     — e.g. vikni-me (Cloud Run service name)
+
+substitutions:
+  _REGION: europe-west1
+  _SERVICE: vikni-me
+  _IMAGE: gcr.io/$PROJECT_ID/vikni-me
+
+steps:
+  # 1. Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - -t
+      - '$_IMAGE:$SHORT_SHA'
+      - -t
+      - '$_IMAGE:latest'
+      - .
+
+  # 2. Push to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - push
+      - '--all-tags'
+      - '$_IMAGE'
+
+  # 3. Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - run
+      - deploy
+      - '$_SERVICE'
+      - --image=$_IMAGE:$SHORT_SHA
+      - --region=$_REGION
+      - --platform=managed
+      - --allow-unauthenticated
+      - --port=8080
+      - --cpu=1
+      - --memory=256Mi
+      - --min-instances=0
+      - --max-instances=3
+      - --concurrency=1000
+
+images:
+  - '$_IMAGE:$SHORT_SHA'
+  - '$_IMAGE:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

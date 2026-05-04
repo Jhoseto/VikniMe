@@ -152,8 +152,6 @@ export default function CategoryPage() {
           </motion.div>
         )}
       </div>
-
-      <div className="h-24 lg:hidden" />
-    </AnimatedPage>
+      </AnimatedPage>
   )
 }

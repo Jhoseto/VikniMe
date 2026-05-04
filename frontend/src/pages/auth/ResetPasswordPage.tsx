@@ -42,7 +42,7 @@ export default function ResetPasswordPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         <Input {...register('password')} label="Нова парола" type={showPw ? 'text' : 'password'}
           autoComplete="new-password" placeholder="Поне 8 символа" leftElement={<Lock size={16} />}
-          rightElement={<button type="button" onClick={() => setShowPw(p => !p)} className="text-surface-400 hover:text-surface-600" aria-label="Toggle">{showPw ? <EyeOff size={16} /> : <Eye size={16} />}</button>}
+          rightElement={<button type="button" onClick={() => setShowPw(p => !p)} className="text-surface-400 hover:text-surface-600" aria-label="Покажи/Скрий паролата">{showPw ? <EyeOff size={16} /> : <Eye size={16} />}</button>}
           error={errors.password?.message} required />
         <Input {...register('confirmPassword')} label="Потвърди паролата" type={showPw ? 'text' : 'password'}
           autoComplete="new-password" placeholder="Повтори паролата" leftElement={<Lock size={16} />}

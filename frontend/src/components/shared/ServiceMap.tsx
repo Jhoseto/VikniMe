@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ServiceMap – interactive MapLibre GL map with service markers.
  * Shows clusters when zoomed out, individual markers when zoomed in.
  * Clicking a marker shows a ServiceCard popup.
@@ -47,7 +47,7 @@ function PricePin({ price, active, onClick }: PinProps) {
       )}
       style={active ? { boxShadow: 'var(--shadow-brand-glow)' } : { boxShadow: 'var(--shadow-card)' }}
     >
-      {price} лв.
+      {price} €
     </button>
   )
 }
@@ -69,7 +69,7 @@ function ServicePopup({ service, onClose }: { service: ServiceWithRelations; onC
             <Star size={12} className="text-orange-400 fill-orange-400" />
             <span className="text-xs text-surface-500">{service.avg_rating.toFixed(1)}</span>
           </div>
-          <span className="font-bold text-sm text-navy-500">{service.price} лв.</span>
+          <span className="font-bold text-sm text-navy-500">{service.price} €</span>
         </div>
         <Link to={`/service/${service.id}`}
           className="mt-2.5 block text-center py-2 rounded-xl text-white text-xs font-semibold hover:opacity-90 transition-opacity"

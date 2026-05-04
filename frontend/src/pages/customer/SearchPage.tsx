@@ -1,4 +1,4 @@
-﻿import { useState, useCallback, useRef, lazy, Suspense } from 'react'
+﻿import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import {
@@ -51,10 +51,10 @@ type SortValue = typeof SORT_OPTIONS[number]['value']
 
 const PRICE_RANGES = [
   { label: 'Всички цени', min: undefined, max: undefined },
-  { label: 'До 50 лв.',   min: 0,   max: 50 },
-  { label: '50–150 лв.',  min: 50,  max: 150 },
-  { label: '150–500 лв.', min: 150, max: 500 },
-  { label: 'Над 500 лв.', min: 500, max: undefined },
+  { label: 'До 50 €',   min: 0,   max: 50 },
+  { label: '50–150 €',  min: 50,  max: 150 },
+  { label: '150–500 €', min: 150, max: 500 },
+  { label: 'Над 500 €', min: 500, max: undefined },
 ]
 
 /* ── Filter panel content ─────────────────────────────────── */
@@ -158,7 +158,7 @@ function FilterContent({ local, setLocal, categories, onReset, onApply, isSheet 
       <div>
         <div className="flex items-center gap-2 mb-3">
           <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#10B981,#2DD4BF)' }}>
-            <span className="text-white text-[10px] font-black">₽</span>
+            <span className="text-white text-[10px] font-black">€</span>
           </div>
           <h3 className="text-xs font-bold text-surface-600 uppercase tracking-wider">Ценови диапазон</h3>
         </div>
@@ -200,6 +200,11 @@ function FilterContent({ local, setLocal, categories, onReset, onApply, isSheet 
 function FilterSheet({ open, onClose, categories, filters, onApply }:
   { open: boolean; onClose: () => void; categories: CategoryRow[]; filters: SearchFilters; onApply: (f: SearchFilters) => void }) {
   const [local, setLocal] = useState<SearchFilters>(filters)
+
+  /* Sync local state from props every time the sheet is opened */
+  useEffect(() => {
+    if (open) setLocal(filters)
+  }, [open, filters])
 
   return (
     <AnimatePresence>
@@ -313,7 +318,6 @@ export default function SearchPage() {
               value={inputValue}
               onChange={e => handleQueryChange(e.target.value)}
               placeholder="Търси услуга или специалист..."
-              autoFocus
               className="w-full h-11 pl-10 pr-10 bg-surface-50 border-2 border-surface-200 rounded-2xl text-sm font-medium outline-none transition-all placeholder:text-surface-400 focus:bg-white focus:border-violet-400"
               onFocus={e => e.currentTarget.style.borderColor = '#7C4DCC'}
               onBlur={e => e.currentTarget.style.borderColor = ''}
@@ -321,8 +325,9 @@ export default function SearchPage() {
             />
             {inputValue && (
               <button onClick={() => handleQueryChange('')}
-                className="absolute right-3 w-5 h-5 rounded-full bg-surface-300 flex items-center justify-center hover:bg-surface-400 transition-colors">
-                <X size={11} className="text-white" />
+                aria-label="Изчисти"
+                className="absolute right-1 w-9 h-9 rounded-full flex items-center justify-center text-surface-400 hover:text-surface-700 hover:bg-surface-100 transition-colors">
+                <X size={16} />
               </button>
             )}
           </div>
@@ -364,7 +369,7 @@ export default function SearchPage() {
       <div className="flex flex-1 min-h-0">
 
         {/* ── Desktop filter sidebar ──────────────────────── */}
-        <aside className="hidden lg:flex lg:flex-col w-64 xl:w-72 shrink-0 border-r border-surface-100 bg-white sticky top-[60px] h-[calc(100vh-60px)] overflow-y-auto">
+        <aside className="hidden lg:flex lg:flex-col w-64 xl:w-72 shrink-0 border-r border-surface-100 bg-white sticky top-[68px] h-[calc(100vh-68px)] overflow-y-auto">
           <div className="flex items-center gap-2.5 px-4 pt-4 pb-3 border-b border-surface-100">
             <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: ME_GRADIENT }}>
               <SlidersHorizontal size={14} className="text-white" />
@@ -450,7 +455,7 @@ export default function SearchPage() {
                   <>
                     <strong className="text-surface-800 font-bold">{results.length}</strong>
                     {' '}{results.length === 1 ? 'резултат' : 'резултата'}
-                    {debouncedQuery && <> за <em className="not-italic font-semibold text-violet-600">„{debouncedQuery}"</em></>}
+                    {debouncedQuery && <> за <em className="not-italic font-semibold text-violet-600">„{debouncedQuery}“</em></>}
                   </>
                 )}
               </p>
@@ -502,9 +507,7 @@ export default function SearchPage() {
               </motion.div>
             )}
           </div>
-
-          <div className="h-24 lg:hidden" />
-        </div>
+      </div>
       </div>
 
       {/* Mobile filter sheet */}

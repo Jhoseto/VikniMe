@@ -38,11 +38,18 @@ export default function EditProfilePage() {
     },
   })
 
+  /* True if either the form or the avatar was modified */
+  const dirty = isDirty || avatarUrl !== null
+
   async function onSubmit({ full_name, phone, location, bio }: FormData) {
     if (!profile) return
     try {
       const updated = await apiUpdateProfile(profile.id, {
-        full_name, phone: phone || null, location: location || null, bio: bio || null,
+        full_name,
+        phone:    phone || null,
+        location: location || null,
+        bio:      bio || null,
+        ...(avatarUrl ? { avatar_url: avatarUrl } : {}),
       })
       setProfile(updated)
       toast.success('Профилът е обновен!')
@@ -61,11 +68,11 @@ export default function EditProfilePage() {
       {/* Header */}
       <div className="bg-white border-b border-surface-100 sticky top-0 z-20 safe-top">
         <div className="max-w-xl mx-auto px-4 h-14 flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-surface-100 transition-colors">
+          <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-surface-100 transition-colors" aria-label="Назад">
             <ArrowLeft size={20} className="text-surface-600" />
           </button>
           <h1 className="font-display font-bold text-navy-500 flex-1">Редактирай профил</h1>
-          {isDirty && (
+          {dirty && (
             <Button size="sm" form="edit-form" type="submit" loading={isSubmitting} leftIcon={<Save size={14} />}>
               Запази
             </Button>

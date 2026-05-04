@@ -63,7 +63,7 @@ export default function CreditsPage() {
                 )}
                 <p className="font-display font-black text-2xl text-navy-500">{pkg.credits}</p>
                 <p className="text-xs text-surface-400 mb-2">кредита</p>
-                <p className="font-bold text-sm text-orange-500">{pkg.price} лв.</p>
+                <p className="font-bold text-sm text-orange-500">{pkg.price} €</p>
               </button>
             ))}
           </div>

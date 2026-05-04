@@ -106,6 +106,7 @@ function ChatContent() {
             <textarea value={input} onChange={e => setInput(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
               placeholder="Напиши въпрос..." rows={1}
+              aria-label="Въпрос към поддръжката"
               className="flex-1 resize-none py-2.5 px-3 rounded-2xl border border-surface-200 text-sm outline-none focus:border-navy-400 transition-colors max-h-24 leading-relaxed" />
             <button onClick={send} disabled={!input.trim()}
               className="w-10 h-10 rounded-xl flex items-center justify-center text-white disabled:opacity-40 transition-opacity shrink-0"

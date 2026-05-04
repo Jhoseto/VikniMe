@@ -197,8 +197,6 @@ export default function NotificationsPage() {
           </motion.div>
         )}
       </div>
-
-      <div className="h-24 lg:hidden" />
-    </AnimatedPage>
+      </AnimatedPage>
   )
 }

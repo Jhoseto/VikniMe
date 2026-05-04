@@ -65,9 +65,10 @@ export function InstallBanner() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          className="fixed bottom-20 left-4 right-4 lg:bottom-6 lg:left-auto lg:right-6 lg:w-96 z-50"
+          className="fixed left-4 right-4 lg:left-auto lg:right-6 lg:w-96 z-50"
+          style={{ bottom: 'calc(80px + env(safe-area-inset-bottom, 0px))' }}
         >
-          <div className="bg-white rounded-2xl p-4 flex items-start gap-3" style={{ boxShadow: 'var(--shadow-xl)' }}>
+          <div className="bg-white rounded-2xl p-4 flex items-start gap-3" style={{ boxShadow: 'var(--shadow-card-hover)' }}>
             {/* App icon */}
             <div className="w-12 h-12 rounded-xl shrink-0 flex items-center justify-center text-white font-display font-black text-xl"
               style={{ background: 'var(--gradient-brand)' }}>

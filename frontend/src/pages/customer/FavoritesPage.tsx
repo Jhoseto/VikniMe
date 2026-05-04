@@ -6,10 +6,12 @@ import { MOCK_SERVICES } from '@/lib/mock/data'
 import { ServiceCard } from '@/components/shared/ServiceCard'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
 import { staggerContainer, staggerItem } from '@/lib/motion'
-
-const MOCK_FAVORITES = MOCK_SERVICES.slice(0, 3)
+import { useFavoritesStore } from '@/stores/favoritesStore'
 
 export default function FavoritesPage() {
+  const ids = useFavoritesStore(s => s.ids)
+  const favorites = MOCK_SERVICES.filter(s => ids.includes(s.id))
+
   return (
     <AnimatedPage className="min-h-screen bg-surface-50">
       <Helmet><title>Запазени услуги – Vikni.me</title></Helmet>
@@ -22,14 +24,16 @@ export default function FavoritesPage() {
             <Heart size={17} strokeWidth={2} className="text-white" />
           </div>
           <h1 className="font-display font-bold text-navy-600 text-lg leading-none">Запазени услуги</h1>
-          {MOCK_FAVORITES.length > 0 && (
-            <span className="ml-auto text-sm text-surface-400 font-medium">{MOCK_FAVORITES.length} запазени</span>
+          {favorites.length > 0 && (
+            <span className="ml-auto text-sm text-surface-400 font-medium">
+              {favorites.length} {favorites.length === 1 ? 'запазена' : 'запазени'}
+            </span>
           )}
         </div>
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-5">
-        {MOCK_FAVORITES.length === 0 ? (
+        {favorites.length === 0 ? (
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
             className="flex flex-col items-center justify-center py-20 text-center">
             <div className="w-20 h-20 rounded-3xl flex items-center justify-center mb-5 shadow-lg"
@@ -37,7 +41,9 @@ export default function FavoritesPage() {
               <Heart size={34} strokeWidth={1.75} className="text-white" />
             </div>
             <h3 className="font-display font-bold text-surface-800 text-lg mb-2">Нямаш запазени услуги</h3>
-            <p className="text-surface-400 text-sm mb-6 max-w-[240px]">Натисни ❤ на услуга, за да я запазиш тук.</p>
+            <p className="text-surface-400 text-sm mb-6 max-w-[260px]">
+              Натисни <Heart size={13} className="inline -mt-0.5 text-orange-400 fill-orange-400" /> на услуга, за да я запазиш тук.
+            </p>
             <Link to="/search"
               className="flex items-center gap-2 px-5 py-2.5 rounded-full text-white font-semibold text-sm hover:opacity-90 shadow-md"
               style={{ background: 'var(--gradient-brand)' }}>
@@ -47,7 +53,7 @@ export default function FavoritesPage() {
         ) : (
           <motion.div variants={staggerContainer} initial="initial" animate="animate"
             className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {MOCK_FAVORITES.map(svc => (
+            {favorites.map(svc => (
               <motion.div key={svc.id} variants={staggerItem}>
                 <ServiceCard service={svc} className="h-full" />
               </motion.div>
@@ -55,8 +61,6 @@ export default function FavoritesPage() {
           </motion.div>
         )}
       </div>
-
-      <div className="h-24 lg:hidden" />
-    </AnimatedPage>
+      </AnimatedPage>
   )
 }

@@ -135,7 +135,7 @@ export default function SupplierDashboardPage() {
         ) : (
           <motion.div variants={staggerContainer} initial="initial" animate="animate"
             className="grid grid-cols-2 gap-3">
-            <StatCard label="Общи приходи"   value={`${totalEarnings} лв.`} icon={<TrendingUp size={22} />} gradient="var(--gradient-brand)" trend="+12% тази седмица" />
+            <StatCard label="Общи приходи"   value={`${totalEarnings} €`} icon={<TrendingUp size={22} />} gradient="var(--gradient-brand)" trend="+12% тази седмица" />
             <StatCard label="Резервации"      value={bookings.length}         icon={<CalendarDays size={22} />} gradient="var(--gradient-primary)" />
             <StatCard label="Активни услуги"  value={services.length}         icon={<Briefcase size={22} />}   gradient="var(--gradient-energy)" />
             <StatCard label="Среден рейтинг"  value={avgRating.toFixed(1)}    icon={<Star size={22} />}        gradient="linear-gradient(135deg,#F59E0B,#EF4444)" />
@@ -173,7 +173,7 @@ export default function SupplierDashboardPage() {
                   </div>
                   <div className="flex flex-col items-end gap-1 shrink-0">
                     <Badge variant="warning">Чакащ</Badge>
-                    <span className="text-sm font-bold text-navy-500">{b.price} лв.</span>
+                    <span className="text-sm font-bold text-navy-500">{b.price} €</span>
                   </div>
                 </Link>
               ))}
@@ -240,15 +240,13 @@ export default function SupplierDashboardPage() {
                       <span className="text-xs text-surface-500">{svc.avg_rating.toFixed(1)}</span>
                     </div>
                   </div>
-                  <span className="text-sm font-bold text-navy-500 shrink-0">{svc.price} лв.</span>
+                  <span className="text-sm font-bold text-navy-500 shrink-0">{svc.price} €</span>
                 </div>
               ))}
             </div>
           )}
         </div>
       </div>
-
-      <div className="h-24 lg:hidden" />
-    </AnimatedPage>
+      </AnimatedPage>
   )
 }
