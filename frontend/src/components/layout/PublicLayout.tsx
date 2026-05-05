@@ -1,12 +1,14 @@
 import { Outlet } from 'react-router-dom'
 import { useBreakpoint } from '@/hooks/useBreakpoint'
 import { useBottomNavVisible } from '@/hooks/useBottomNavVisible'
+import { useMobileTabSwipe } from '@/hooks/useMobileTabSwipe'
 import { BottomNavBar } from './BottomNavBar'
 import { LeftSidebar } from './LeftSidebar'
 
 export function PublicLayout() {
   const { isDesktop } = useBreakpoint()
   const navVisible = useBottomNavVisible()
+  const tabSwipeRef = useMobileTabSwipe(!isDesktop && navVisible)
 
   if (isDesktop) {
     return (
@@ -26,6 +28,7 @@ export function PublicLayout() {
   return (
     <div className="flex flex-col min-h-screen bg-surface-50">
       <main
+        ref={tabSwipeRef}
         className="flex-1"
         style={{ paddingBottom: navVisible ? 'calc(72px + env(safe-area-inset-bottom, 0px))' : 0 }}
       >

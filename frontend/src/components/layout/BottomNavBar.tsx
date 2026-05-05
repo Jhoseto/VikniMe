@@ -1,20 +1,16 @@
+import { useLayoutEffect, useMemo, useRef } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { Home, Search, CalendarDays, MessageCircle, User } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { apiGetChatList } from '@/api/messages'
 import { useAuthStore } from '@/stores/authStore'
 import { useHaptic } from '@/hooks/useHaptic'
 import { useBottomNavVisible } from '@/hooks/useBottomNavVisible'
+import {
+  getBottomNavTabIndex,
+  getMobileBottomNavItems,
+} from '@/components/layout/bottomNavConfig'
 import { clsx } from 'clsx'
-
-const NAV_ITEMS = [
-  { to: '/',          label: 'Начало',     Icon: Home,         exact: true },
-  { to: '/search',    label: 'Търси',      Icon: Search },
-  { to: '/bookings',  label: 'Резервации', Icon: CalendarDays },
-  { to: '/chat',      label: 'Чат',        Icon: MessageCircle },
-  { to: '/profile',   label: 'Профил',     Icon: User },
-]
 
 /* .me gradient from logo */
 const ACTIVE_GRADIENT = 'linear-gradient(135deg, #7C4DCC 0%, #2DD4BF 100%)'
@@ -24,15 +20,27 @@ export function BottomNavBar() {
   const { trigger } = useHaptic()
   const location = useLocation()
   const visible = useBottomNavVisible()
+  const listRef = useRef<HTMLUListElement>(null)
 
-  /* Real chat unread (sum across threads) */
+  const items = useMemo(() => getMobileBottomNavItems(profile), [profile])
+  const activeIndex = useMemo(
+    () => getBottomNavTabIndex(location.pathname, items),
+    [location.pathname, items],
+  )
+
   const { data: threads = [] } = useQuery({
     queryKey: ['chat-list', profile?.id],
-    queryFn:  () => apiGetChatList(profile!.id),
-    enabled:  !!profile,
+    queryFn: () => apiGetChatList(profile!.id),
+    enabled: !!profile,
     refetchInterval: 30_000,
   })
   const unreadCount = threads.reduce((acc, t) => acc + t.unreadCount, 0)
+
+  useLayoutEffect(() => {
+    if (activeIndex < 0 || !listRef.current) return
+    const li = listRef.current.children[activeIndex] as HTMLElement | undefined
+    li?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' })
+  }, [activeIndex, items.length, location.pathname])
 
   if (!visible) return null
 
@@ -46,23 +54,28 @@ export function BottomNavBar() {
       aria-label="Основна навигация"
     >
       <ul
-        className="flex items-stretch pt-1.5 pl-[max(0.25rem,env(safe-area-inset-left,0px))] pr-[max(0.25rem,env(safe-area-inset-right,0px))]"
+        ref={listRef}
+        className={clsx(
+          'flex items-stretch pt-1.5 gap-0.5',
+          'overflow-x-auto overflow-y-hidden',
+          'scroll-smooth snap-x snap-mandatory',
+          '[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden',
+          'pl-[max(0.5rem,env(safe-area-inset-left,0px))]',
+          'pr-[max(0.5rem,env(safe-area-inset-right,0px))]',
+        )}
       >
-        {NAV_ITEMS.map(({ to, label, Icon, exact }) => {
-          const isActive = exact
-            ? location.pathname === to
-            : location.pathname.startsWith(to)
-          const isChat = label === 'Чат'
+        {items.map(({ path, label, icon: Icon, match }) => {
+          const isActive = match(location.pathname)
+          const isChat = path === '/chat'
 
           return (
-            <li key={to} className="flex-1">
+            <li key={`${path}-${label}`} className="flex-none snap-center min-w-[4.1rem] max-w-[5.25rem]">
               <NavLink
-                to={to}
+                to={path}
                 onClick={() => trigger('light')}
                 aria-current={isActive ? 'page' : undefined}
-                className="relative flex flex-col items-center gap-1 pt-1 pb-2 select-none rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                className="relative flex flex-col items-center gap-1 pt-1 pb-2 px-0.5 select-none rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               >
-                {/* Top gradient indicator */}
                 {isActive && (
                   <motion.div
                     layoutId="nav-pill"
@@ -72,15 +85,18 @@ export function BottomNavBar() {
                   />
                 )}
 
-                {/* Icon container — fixed size, no layout shift on active toggle */}
                 <span className="relative w-10 h-10 flex items-center justify-center">
                   <motion.div
                     animate={{ scale: isActive ? 1 : 0.95 }}
                     transition={{ type: 'spring', stiffness: 420, damping: 28 }}
                     className="w-9 h-9 rounded-xl flex items-center justify-center"
-                    style={isActive
-                      ? { background: ACTIVE_GRADIENT, boxShadow: '0 4px 14px -4px rgba(124,77,204,0.45)' }
-                      : { background: 'transparent' }
+                    style={
+                      isActive
+                        ? {
+                            background: ACTIVE_GRADIENT,
+                            boxShadow: '0 4px 14px -4px rgba(124,77,204,0.45)',
+                          }
+                        : { background: 'transparent' }
                     }
                   >
                     <Icon
@@ -90,7 +106,6 @@ export function BottomNavBar() {
                     />
                   </motion.div>
 
-                  {/* Unread badge */}
                   {isChat && unreadCount > 0 && (
                     <span
                       className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-orange-500 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white"
@@ -100,11 +115,10 @@ export function BottomNavBar() {
                   )}
                 </span>
 
-                {/* Label */}
                 <span
                   className={clsx(
-                    'text-[10px] font-bold leading-none tracking-tight transition-colors',
-                    isActive ? 'text-violet-700' : 'text-surface-400'
+                    'text-[9px] font-bold leading-none tracking-tight text-center line-clamp-2 transition-colors px-0.5',
+                    isActive ? 'text-violet-700' : 'text-surface-400',
                   )}
                 >
                   {label}

@@ -6,7 +6,7 @@ import {
   Music2, GraduationCap, PawPrint, Dumbbell, Wrench, CheckCircle2,
   type LucideIcon,
 } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import { apiGetCategories, apiGetFeaturedServices, type ServiceWithRelations } from '@/api/services'
 import { useAuthStore } from '@/stores/authStore'
@@ -89,6 +89,170 @@ const HERO_IMAGES = [
   },
 ]
 
+/* ── Premium hero choreography (slow, soft easing + spring) ─ */
+const HERO_EASE = [0.22, 1, 0.36, 1] as const
+
+const heroLeft: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.11, delayChildren: 0.18 } },
+}
+
+const heroFadeUp: Variants = {
+  hidden: { opacity: 0, y: 22 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.95, ease: HERO_EASE },
+  },
+}
+
+const heroScaleIn: Variants = {
+  hidden: { opacity: 0, y: 22, scale: 0.94 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { type: 'spring', stiffness: 110, damping: 22, mass: 0.9 },
+  },
+}
+
+const heroStats: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
+}
+
+const heroMosaic: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.16, delayChildren: 0.55 } },
+}
+
+const heroMosaicItem: Variants = {
+  hidden: { opacity: 0, scale: 0.88, y: 22 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 1.15, ease: HERO_EASE },
+  },
+}
+
+const heroCards: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.14, delayChildren: 0.95 } },
+}
+
+const heroCardEntrance: Variants = {
+  hidden: { opacity: 0, y: 30, rotateY: -18, scale: 0.93 },
+  show: {
+    opacity: 1,
+    y: 0,
+    rotateY: 0,
+    scale: 1,
+    transition: { type: 'spring', stiffness: 95, damping: 18, mass: 0.95 },
+  },
+}
+
+/* Title — per-line mask reveal */
+const heroTitle: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.16, delayChildren: 0.28 } },
+}
+
+const heroTitleLine: Variants = {
+  hidden: { y: '115%', opacity: 0 },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 1.05, ease: HERO_EASE },
+  },
+}
+
+/* ── Hero spotlight cards (left of image mosaic) ───────────── */
+const HERO_SPOTLIGHT = [
+  {
+    name: 'Елена С.',
+    title: 'Фитнес треньор',
+    rating: 4.89,
+    price: '55 €/ч',
+    avatar:
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&q=80&auto=format&fit=crop&crop=face',
+  },
+  {
+    name: 'Иван П.',
+    title: 'Личен готвач',
+    rating: 4.92,
+    price: '95 €/ч',
+    avatar:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&q=80&auto=format&fit=crop&crop=face',
+  },
+  {
+    name: 'Диана К.',
+    title: 'Фотограф',
+    rating: 4.94,
+    price: '70 €/ч',
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&q=80&auto=format&fit=crop&crop=face',
+  },
+] as const
+
+function HeroSpotlightCard({
+  name,
+  title,
+  rating,
+  price,
+  avatar,
+  onReserve,
+}: {
+  name: string
+  title: string
+  rating: number
+  price: string
+  avatar: string
+  onReserve: () => void
+}) {
+  return (
+    <div
+      className="rounded-2xl p-3 w-[12.75rem] max-w-full flex flex-col shrink-0"
+      style={{
+        background: 'rgba(255,255,255,0.92)',
+        backdropFilter: 'blur(20px)',
+        boxShadow: '0 16px 48px -12px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.55)',
+      }}
+    >
+      <div className="flex items-center gap-2 mb-1.5">
+        <img
+          src={avatar}
+          alt=""
+          className="w-10 h-10 rounded-full object-cover ring-2 ring-white shrink-0"
+        />
+        <div className="min-w-0">
+          <p className="text-sm font-bold text-surface-800 leading-tight truncate">{name}</p>
+          <p className="text-xs text-surface-400 truncate">{title}</p>
+        </div>
+      </div>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-0.5">
+          {[1, 2, 3, 4, 5].map((s) => (
+            <Star key={s} size={10} fill="#F59E0B" className="text-amber-400" />
+          ))}
+          <span className="text-xs font-bold text-surface-700 ml-1">{rating.toFixed(2)}</span>
+        </div>
+        <span className="text-xs font-bold shrink-0" style={{ color: '#1B2A5E' }}>
+          {price}
+        </span>
+      </div>
+      <button
+        type="button"
+        onClick={onReserve}
+        className="mt-1.5 w-full py-1.5 rounded-xl text-white text-xs font-bold transition-opacity hover:opacity-90"
+        style={{ background: 'linear-gradient(135deg,#7C4DCC,#2DD4BF)' }}
+      >
+        Резервирай
+      </button>
+    </div>
+  )
+}
+
 /* ── How-it-works data ─────────────────────────────────────── */
 const STEPS = [
   {
@@ -140,7 +304,6 @@ export default function HomePage() {
   const qc = useQueryClient()
   const { data: categories = [], isLoading: catLoading } = useCategories()
   const { data: services = [], isLoading: svcLoading } = useFeaturedServices()
-  const greeting = profile?.full_name?.split(' ')[0] ?? null
 
   const { containerRef, pullY, isRefreshing, onTouchStart, onTouchMove, onTouchEnd } = usePullToRefresh({
     onRefresh: async () => {
@@ -153,7 +316,7 @@ export default function HomePage() {
     <AnimatedPage>
       <Helmet>
         <title>Vikni.me – Намери специалист</title>
-        <meta name="description" content="Платформа за услуги – намери масажист, фотограф, готвач и още." />
+        <meta name="description" content="Платформа за услуги – намери музикант, DJ, масажист, фотограф, готвач и още." />
       </Helmet>
 
       {/* Pull-to-refresh indicator */}
@@ -165,184 +328,331 @@ export default function HomePage() {
 
         {/* ── Hero ─────────────────────────────────────────── */}
         <section className="relative overflow-hidden">
-          <div className="flex flex-col lg:flex-row lg:[min-height:min(90vh,680px)]">
+          {/* Single background for entire hero (all columns) — slow fade in */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.4, ease: HERO_EASE }}
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(140deg, #080f24 0%, #101d48 50%, #1a1155 100%)' }}
+            aria-hidden
+          />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.045 }}
+            transition={{ duration: 1.6, ease: HERO_EASE, delay: 0.1 }}
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage:
+                'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)',
+              backgroundSize: '26px 26px',
+            }}
+            aria-hidden
+          />
+          <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.6 }}
+              animate={{ opacity: 1, scale: 1, x: [0, 28, -16, 0], y: [0, -22, 12, 0] }}
+              transition={{
+                opacity: { duration: 1.8, ease: HERO_EASE },
+                scale: { duration: 1.8, ease: HERO_EASE },
+                x: { duration: 18, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: 1.8 },
+                y: { duration: 22, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: 1.8 },
+              }}
+              className="absolute -top-40 -left-20 w-96 h-96 rounded-full blur-3xl"
+              style={{ background: 'radial-gradient(circle, rgba(124,77,204,0.28), transparent 70%)' }}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.6 }}
+              animate={{ opacity: 1, scale: 1, x: [0, -22, 18, 0], y: [0, 18, -14, 0] }}
+              transition={{
+                opacity: { duration: 1.8, ease: HERO_EASE, delay: 0.15 },
+                scale: { duration: 1.8, ease: HERO_EASE, delay: 0.15 },
+                x: { duration: 24, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: 1.95 },
+                y: { duration: 19, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: 1.95 },
+              }}
+              className="absolute bottom-0 right-0 w-80 h-80 rounded-full blur-3xl"
+              style={{ background: 'radial-gradient(circle, rgba(232,88,31,0.18), transparent 70%)' }}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.6 }}
+              animate={{ opacity: 1, scale: 1, x: [0, 18, -22, 0], y: [0, -14, 18, 0] }}
+              transition={{
+                opacity: { duration: 2.0, ease: HERO_EASE, delay: 0.25 },
+                scale: { duration: 2.0, ease: HERO_EASE, delay: 0.25 },
+                x: { duration: 26, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: 2.1 },
+                y: { duration: 21, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: 2.1 },
+              }}
+              className="absolute top-1/2 left-1/3 w-64 h-64 rounded-full blur-3xl"
+              style={{ background: 'radial-gradient(circle, rgba(45,212,191,0.1), transparent 70%)' }}
+            />
+          </div>
+
+          <div className="relative z-[1] flex flex-col lg:flex-row lg:items-stretch lg:[min-height:min(90vh,680px)]">
 
             {/* ── LEFT: Content panel ─────────────────────── */}
-            <div className="relative flex-1 lg:w-[56%] flex flex-col justify-center px-5 pt-9 pb-12 lg:px-14 lg:py-20 safe-top"
-              style={{ background: 'linear-gradient(140deg, #080f24 0%, #101d48 50%, #1a1155 100%)' }}>
-
-              {/* Mesh dot texture */}
-              <div className="absolute inset-0 opacity-[0.045] pointer-events-none"
-                style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)', backgroundSize: '26px 26px' }} />
-
-              {/* Ambient glow blobs */}
-              <div className="absolute -top-40 -left-20 w-96 h-96 rounded-full blur-3xl pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(124,77,204,0.28), transparent 70%)' }} />
-              <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full blur-3xl pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(232,88,31,0.18), transparent 70%)' }} />
-              <div className="absolute top-1/2 left-1/3 w-64 h-64 rounded-full blur-3xl pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(45,212,191,0.1), transparent 70%)' }} />
-
+            <motion.div
+              variants={heroLeft}
+              initial="hidden"
+              animate="show"
+              className="relative flex-1 lg:min-w-0 flex flex-col justify-center px-5 pt-9 pb-12 lg:pl-14 lg:pr-10 lg:py-20 safe-top"
+            >
               <div className="relative max-w-lg">
-                {/* Live badge */}
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-                  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-7 border"
-                  style={{ background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)' }}>
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                  <span className="text-white/65 text-xs font-semibold tracking-wide">
-                    {profile && greeting ? `Здравей, ${greeting} 👋` : '1 247 специалисти онлайн сега'}
+                {/* Headline — per-line mask reveal */}
+                <motion.h1
+                  variants={heroTitle}
+                  className="font-display font-black leading-[1.08] tracking-tight mb-3"
+                  style={{ fontSize: 'clamp(1.85rem, 5.5vw, 3.4rem)' }}
+                >
+                  <span className="block overflow-hidden pb-1">
+                    <motion.span variants={heroTitleLine} className="block will-change-transform">
+                      <span className="text-gray-300">ВИКНИ </span>
+                      <span
+                        style={{
+                          background: 'linear-gradient(90deg,rgb(181,5,187) 0%,rgb(37,164,249) 45%,rgb(3,248,228) 100%)',
+                          backgroundSize: '200% 100%',
+                          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+                          animation: 'heroTextSheen 7s ease-in-out 1.6s infinite',
+                        }}
+                      >
+                        Твоя човек
+                      </span>
+                    </motion.span>
                   </span>
-                </motion.div>
-
-                {/* Headline */}
-                <motion.h1 initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0, transition: { delay: 0.07 } }}
-                  className="font-display font-black leading-[1.08] mb-5"
-                  style={{ fontSize: 'clamp(1.85rem, 5.5vw, 3.4rem)' }}>
-                  <span className="text-white">Намери </span>
-                  <span style={{
-                    background: 'linear-gradient(90deg, #E8581F 0%, #F9A325 45%, #2DD4BF 100%)',
-                    WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                  }}>специалист</span>
-                  <br />
-                  <span className="text-white">за всяка нужда</span>
+                  <span className="block overflow-hidden pb-1">
+                    <motion.span variants={heroTitleLine} className="block text-gray-300 will-change-transform">
+                      за всеки повод
+                    </motion.span>
+                  </span>
+                  <span className="block overflow-hidden pb-1">
+                    <motion.span
+                      variants={heroTitleLine}
+                      className="block will-change-transform"
+                      style={{
+                        background: 'linear-gradient(90deg,rgb(181,5,187) 0%,rgb(37,164,249) 45%,rgb(3,248,228) 100%)',
+                        backgroundSize: '200% 100%',
+                        WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+                        animation: 'heroTextSheen 7s ease-in-out 1.85s infinite',
+                      }}
+                    >
+                      по всяко време
+                    </motion.span>
+                  </span>
                 </motion.h1>
 
                 {/* Subtitle */}
-                <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0, transition: { delay: 0.14 } }}
-                  className="text-white/50 text-sm lg:text-lg mb-7 leading-relaxed">
-                  Масажисти, фотографи, готвачи, треньори — резервирай онлайн, плати сигурно.
+                <motion.p
+                  variants={heroFadeUp}
+                  className="text-white/55 text-sm lg:text-lg mb-8 leading-relaxed max-w-md"
+                >
+                  Музиканти, DJ's, масажисти, фотографи, готвачи, треньори и много други — резервирай онлайн, плати сигурно.
                 </motion.p>
 
-                {/* Search button */}
-                <motion.button initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }}
-                  onClick={() => navigate('/search')}
-                  className="w-full flex items-center gap-3.5 bg-white rounded-2xl text-left group transition-all duration-300 mb-8"
-                  style={{ padding: '14px 18px', boxShadow: '0 24px 60px -8px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08)' }}
-                  aria-label="Търси">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ background: 'linear-gradient(135deg,#7C4DCC 0%,#2DD4BF 100%)' }}>
-                    <Search size={18} className="text-white" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-surface-700 text-sm font-semibold leading-tight">Каква услуга търсиш?</p>
-                    <p className="text-surface-400 text-xs leading-tight mt-0.5">Масаж, фотография, готвач...</p>
-                  </div>
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 group-hover:translate-x-0.5 transition-transform"
-                    style={{ background: 'linear-gradient(135deg,#7C4DCC,#2DD4BF)' }}>
-                    <ArrowRight size={15} className="text-white" />
-                  </div>
-                </motion.button>
+                {/* Search button + entrance halo */}
+                <div className="relative mb-9">
+                  <motion.div
+                    aria-hidden
+                    className="absolute -inset-4 rounded-3xl pointer-events-none"
+                    style={{ background: 'radial-gradient(closest-side, rgba(124,77,204,0.45), transparent 70%)' }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: [0, 0.85, 0] }}
+                    transition={{ delay: 0.7, duration: 1.7, ease: 'easeInOut', times: [0, 0.45, 1] }}
+                  />
+                  <motion.button
+                    variants={heroScaleIn}
+                    whileHover={{ y: -2, transition: { duration: 0.25, ease: HERO_EASE } }}
+                    whileTap={{ scale: 0.985 }}
+                    onClick={() => navigate('/search')}
+                    className="relative w-full flex items-center gap-3.5 bg-white rounded-2xl text-left group"
+                    style={{ padding: '14px 18px', boxShadow: '0 24px 60px -8px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08)' }}
+                    aria-label="Търси"
+                  >
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                      style={{ background: 'linear-gradient(135deg,#7C4DCC 0%,#2DD4BF 100%)' }}>
+                      <Search size={18} className="text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-surface-700 text-sm font-semibold leading-tight">Каква услуга търсиш?</p>
+                      <p className="text-surface-400 text-xs leading-tight mt-0.5">Музикант, DJ, масаж, фотография, готвач...</p>
+                    </div>
+                    <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 group-hover:translate-x-0.5 transition-transform duration-300"
+                      style={{ background: 'linear-gradient(135deg,#7C4DCC,#2DD4BF)' }}>
+                      <ArrowRight size={15} className="text-white" />
+                    </div>
+                  </motion.button>
+                </div>
 
-                {/* Trust stats */}
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: 0.3 } }}
-                  className="grid grid-cols-3 gap-3 lg:flex lg:gap-8">
+                {/* Trust stats — staggered */}
+                <motion.div
+                  variants={heroStats}
+                  className="grid grid-cols-3 gap-4 lg:flex lg:gap-10"
+                >
                   {[
                     { value: '2 400+', label: 'специалисти' },
                     { value: '18 000+', label: 'резервации' },
                     { value: '4.9★', label: 'рейтинг' },
                   ].map(({ value, label }) => (
-                    <div key={label}>
-                      <p className="font-display font-black text-white text-lg lg:text-2xl leading-none">{value}</p>
-                      <p className="text-white/40 text-[10px] lg:text-xs mt-1 font-medium">{label}</p>
-                    </div>
+                    <motion.div key={label} variants={heroFadeUp}>
+                      <p className="font-display font-black text-white text-lg lg:text-2xl leading-none tracking-tight">{value}</p>
+                      <p className="text-white/45 text-[10px] lg:text-xs mt-1.5 font-medium">{label}</p>
+                    </motion.div>
                   ))}
                 </motion.div>
 
                 {/* CTA buttons (guests) */}
                 {!profile && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: 0.38 } }}
-                    className="flex items-center gap-3 mt-8 flex-wrap">
-                    <button onClick={() => navigate('/register')}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-navy-700 hover:brightness-105 transition-all"
-                      style={{ background: 'white', boxShadow: '0 4px 20px -4px rgba(0,0,0,0.35)' }}>
+                  <motion.div
+                    variants={heroFadeUp}
+                    className="flex items-center gap-3 mt-9 flex-wrap"
+                  >
+                    <motion.button
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.25, ease: HERO_EASE }}
+                      onClick={() => navigate('/register')}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-navy-700"
+                      style={{ background: 'white', boxShadow: '0 4px 20px -4px rgba(0,0,0,0.35)' }}
+                    >
                       <CheckCircle2 size={15} />
                       Регистрирай се безплатно
-                    </button>
-                    <button onClick={() => navigate('/login')}
-                      className="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all"
-                      style={{ color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.15)' }}
-                      onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)')}
-                      onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)')}>
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.25, ease: HERO_EASE }}
+                      onClick={() => navigate('/login')}
+                      className="px-5 py-2.5 rounded-xl text-sm font-semibold"
+                      style={{ color: 'rgba(255,255,255,0.78)', border: '1px solid rgba(255,255,255,0.16)' }}
+                    >
                       Вход
-                    </button>
+                    </motion.button>
                   </motion.div>
                 )}
               </div>
-            </div>
+            </motion.div>
 
-            {/* ── RIGHT: Image mosaic (desktop only) ──────── */}
-            <div className="hidden lg:block relative lg:w-[44%] overflow-hidden"
-              style={{ background: '#080f24' }}>
+            {/* ── CENTER: Spotlight cards (3D entrance + float hover) ─ */}
+            <motion.div
+              variants={heroCards}
+              initial="hidden"
+              animate="show"
+              className="hidden lg:flex lg:self-stretch flex-col justify-evenly shrink-0 w-[14rem] py-6 px-2 items-center relative"
+              style={{ perspective: '1100px' }}
+            >
+              {HERO_SPOTLIGHT.map((spec) => (
+                <motion.div
+                  key={spec.name}
+                  variants={heroCardEntrance}
+                  whileHover={{
+                    y: -6,
+                    rotateX: 3,
+                    rotateY: -4,
+                    scale: 1.02,
+                    transition: { type: 'spring', stiffness: 240, damping: 22 },
+                  }}
+                  className="relative z-10 will-change-transform"
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  <HeroSpotlightCard
+                    {...spec}
+                    onReserve={() => navigate('/search')}
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
 
-              {/* 2×2 image grid */}
-              <div className="absolute inset-0 grid grid-cols-2 gap-2.5 p-5">
+            {/* ── RIGHT: Full-bleed mosaic (original cell sizes) ─ */}
+            <div className="hidden lg:block relative lg:w-[44%] shrink-0 overflow-hidden">
+
+              {/* 2×2 image grid — same as before: fills entire right column */}
+              <motion.div
+                variants={heroMosaic}
+                initial="hidden"
+                animate="show"
+                className="absolute inset-0 grid grid-cols-2 gap-2.5 p-5"
+              >
                 {HERO_IMAGES.map((img, i) => (
-                  <motion.div key={i}
-                    initial={{ opacity: 0, scale: 0.92, y: i % 2 === 0 ? -12 : 12 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ delay: 0.25 + i * 0.09, duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
-                    className="relative rounded-2xl overflow-hidden"
+                  <motion.div
+                    key={i}
+                    variants={heroMosaicItem}
+                    whileHover={{ scale: 1.018, transition: { duration: 0.45, ease: HERO_EASE } }}
+                    className="relative rounded-2xl overflow-hidden will-change-transform group"
                   >
-                    <img src={img.url} alt={img.alt} className="w-full h-full object-cover" loading="lazy"
-                      style={{ filter: 'brightness(0.88) saturate(1.1)' }} />
-                    {/* Dark gradient bottom overlay */}
+                    {/* Continuous Ken Burns drift on the image itself */}
+                    <motion.img
+                      src={img.url}
+                      alt={img.alt}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      style={{ filter: 'brightness(0.88) saturate(1.1)' }}
+                      initial={{ scale: 1 }}
+                      animate={{ scale: [1, 1.05, 1.02, 1], x: [0, -6, 6, 0], y: [0, 4, -4, 0] }}
+                      transition={{
+                        duration: 18 + i * 2,
+                        ease: 'easeInOut',
+                        repeat: Infinity,
+                        repeatType: 'mirror',
+                        delay: 1.4 + i * 0.2,
+                      }}
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                    {/* Service label chip */}
-                    <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 rounded-full px-2.5 py-1"
-                      style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)' }}>
+                    {/* Specular shine on hover */}
+                    <div
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                      style={{
+                        background:
+                          'linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.18) 50%, transparent 65%)',
+                      }}
+                    />
+                    <div
+                      className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 rounded-full px-2.5 py-1"
+                      style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)' }}
+                    >
                       <img.Icon size={10} className="text-white shrink-0" />
                       <span className="text-white text-[10px] font-semibold whitespace-nowrap">{img.label}</span>
                     </div>
                   </motion.div>
                 ))}
-              </div>
-
-              {/* Left gradient blend with content panel */}
-              <div className="absolute inset-y-0 left-0 w-10 z-10 pointer-events-none"
-                style={{ background: 'linear-gradient(to right, #101d48, transparent)' }} />
-
-              {/* Floating specialist card */}
-              <motion.div
-                initial={{ opacity: 0, y: 24, x: 12 }} animate={{ opacity: 1, y: 0, x: 0 }}
-                transition={{ delay: 0.75, duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}
-                className="absolute bottom-10 right-5 rounded-2xl p-4 z-20 w-52"
-                style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(20px)', boxShadow: '0 20px 60px -8px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.6)' }}
-              >
-                <div className="flex items-center gap-2.5 mb-2.5">
-                  <img
-                    src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=80&h=80&q=80&auto=format&fit=crop&crop=face"
-                    alt="Специалист"
-                    className="w-10 h-10 rounded-full object-cover ring-2 ring-white shrink-0"
-                  />
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold text-surface-800 leading-tight truncate">Мария Д.</p>
-                    <p className="text-xs text-surface-400 truncate">Масажотерапевт</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-0.5">
-                    {[1,2,3,4,5].map(s => (
-                      <Star key={s} size={10} fill="#F59E0B" className="text-amber-400" />
-                    ))}
-                    <span className="text-xs font-bold text-surface-700 ml-1">4.97</span>
-                  </div>
-                  <span className="text-xs font-bold" style={{ color: '#1B2A5E' }}>80 €/ч</span>
-                </div>
-                <button className="mt-2.5 w-full py-1.5 rounded-xl text-white text-xs font-bold transition-opacity hover:opacity-90"
-                  style={{ background: 'linear-gradient(135deg,#7C4DCC,#2DD4BF)' }}>
-                  Резервирай
-                </button>
               </motion.div>
 
-              {/* Online badge */}
+              {/* Left gradient blend with content panel */}
+              <div
+                className="absolute inset-y-0 left-0 w-10 z-10 pointer-events-none"
+                style={{ background: 'linear-gradient(to right, #101d48, transparent)' }}
+              />
+
+              {/* Online badge with pulsing halo rings */}
               <motion.div
-                initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.85 }}
-                className="absolute top-6 right-5 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-                style={{ background: 'rgba(16,185,129,0.9)', backdropFilter: 'blur(8px)', boxShadow: '0 4px 20px -4px rgba(16,185,129,0.5)' }}
+                initial={{ opacity: 0, x: 24, scale: 0.92 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ duration: 0.85, ease: HERO_EASE, delay: 1.2 }}
+                className="absolute top-6 right-5 z-20"
               >
-                <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                <span className="text-white text-xs font-bold">Достъпна сега</span>
+                <div className="relative">
+                  <motion.span
+                    aria-hidden
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: 'rgba(16,185,129,0.45)' }}
+                    initial={{ scale: 1, opacity: 0 }}
+                    animate={{ scale: [1, 1.55, 1.85], opacity: [0.55, 0.18, 0] }}
+                    transition={{ duration: 2.4, repeat: Infinity, ease: 'easeOut', delay: 1.6 }}
+                  />
+                  <motion.span
+                    aria-hidden
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: 'rgba(16,185,129,0.4)' }}
+                    initial={{ scale: 1, opacity: 0 }}
+                    animate={{ scale: [1, 1.4, 1.7], opacity: [0.4, 0.12, 0] }}
+                    transition={{ duration: 2.4, repeat: Infinity, ease: 'easeOut', delay: 2.4 }}
+                  />
+                  <div
+                    className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+                    style={{ background: 'rgba(16,185,129,0.92)', backdropFilter: 'blur(8px)', boxShadow: '0 4px 20px -4px rgba(16,185,129,0.5)' }}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                    <span className="text-white text-xs font-bold">Достъпна сега</span>
+                  </div>
+                </div>
               </motion.div>
             </div>
 
