@@ -11,6 +11,7 @@ import { apiGetMyBookings, type BookingWithRelations } from '@/api/bookings'
 import { Button } from '@/components/ui/Button'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { staggerContainer, staggerItem } from '@/lib/motion'
 
 export default function SupplierEarningsPage() {
@@ -91,7 +92,16 @@ export default function SupplierEarningsPage() {
           {isLoading ? (
             <div className="space-y-2">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-14 rounded-xl" />)}</div>
           ) : completed.length === 0 ? (
-            <div className="text-center py-8 text-surface-400 text-sm">Нямаш завършени резервации.</div>
+            <div className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: 'var(--shadow-card)' }}>
+              <EmptyState
+                icon={TrendingUp}
+                tone="teal"
+                title="Нямаш завършени резервации"
+                description="След като клиенти завършат услуги, изплащанията ще се покажат тук."
+                size="compact"
+                className="py-8"
+              />
+            </div>
           ) : (
             <motion.div variants={staggerContainer} initial="initial" animate="animate"
               className="bg-white rounded-2xl overflow-hidden divide-y divide-surface-100" style={{ boxShadow: 'var(--shadow-card)' }}>

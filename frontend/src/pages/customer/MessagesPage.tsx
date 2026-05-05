@@ -17,6 +17,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { Avatar } from '@/components/ui/Avatar'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { staggerContainer, staggerItem } from '@/lib/motion'
 import { clsx } from 'clsx'
 
@@ -66,18 +67,20 @@ function DesktopChatPanel({ otherUserId }: { otherUserId: string }) {
 
   if (!otherUserId) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center gap-3 px-6 text-center">
-        <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-md"
-          style={{ background: 'linear-gradient(135deg,#7C4DCC 0%,#2DD4BF 100%)' }}>
-          <MessageCircle size={28} strokeWidth={1.75} className="text-white" />
-        </div>
-        <p className="font-semibold text-surface-700 text-base">Избери разговор</p>
-        <p className="text-surface-400 text-sm max-w-xs">Започни нов чат след резервация на услуга.</p>
-        <Link to="/search"
-          className="mt-2 px-5 py-2.5 rounded-full text-white font-semibold text-sm shadow-md hover:opacity-90"
-          style={{ background: 'var(--gradient-brand)' }}>
-          Намери услуга
-        </Link>
+      <div className="flex-1 flex flex-col items-center justify-center px-6">
+        <EmptyState
+          icon={MessageCircle}
+          tone="teal"
+          title="Избери разговор"
+          description="Започни нов чат след резервация на услуга."
+          className="py-12"
+        >
+          <Link to="/search"
+            className="px-5 py-2.5 rounded-full text-white font-semibold text-sm shadow-md hover:opacity-90"
+            style={{ background: 'var(--gradient-brand)' }}>
+            Намери услуга
+          </Link>
+        </EmptyState>
       </div>
     )
   }
@@ -224,10 +227,7 @@ export default function MessagesPage() {
                 </div>
               ))
             ) : threads.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 text-center px-4">
-                <MessageCircle size={28} className="text-surface-300 mb-2" />
-                <p className="text-xs text-surface-400">Няма съобщения</p>
-              </div>
+              <EmptyState icon={MessageCircle} tone="teal" title="Няма съобщения" size="compact" className="py-12" />
             ) : (
               <motion.div variants={staggerContainer} initial="initial" animate="animate">
                 {threads.map(t => (
@@ -269,14 +269,12 @@ function MobileThreadList({ threads, isLoading }: { threads: ChatThread[]; isLoa
 
   if (threads.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-center">
-        <div className="w-20 h-20 rounded-3xl flex items-center justify-center mb-5 shadow-lg"
-          style={{ background: 'linear-gradient(135deg,#7C4DCC 0%,#2DD4BF 100%)' }}>
-          <MessageCircle size={34} strokeWidth={1.75} className="text-white" />
-        </div>
-        <h3 className="font-display font-bold text-surface-800 text-lg mb-2">Няма съобщения</h3>
-        <p className="text-surface-400 text-sm max-w-[240px]">Резервирай услуга и пиши на доставчика директно.</p>
-      </div>
+      <EmptyState
+        icon={MessageCircle}
+        tone="teal"
+        title="Няма съобщения"
+        description="Резервирай услуга и пиши на доставчика директно."
+      />
     )
   }
 

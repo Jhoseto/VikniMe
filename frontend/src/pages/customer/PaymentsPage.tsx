@@ -33,6 +33,7 @@ import {
 } from '@/api/payments'
 import { useAuthStore } from '@/stores/authStore'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 
@@ -212,7 +213,14 @@ function PayoutSection() {
           <p className="text-sm text-surface-500 font-mono mt-1">{payout.iban}</p>
         </div>
       ) : !editing ? (
-        <p className="text-sm text-surface-400">Нямаш добавен IBAN за изплащания.</p>
+        <EmptyState
+          icon={Building2}
+          tone="teal"
+          title="Нямаш добавен IBAN"
+          description="Добави банкова сметка, за да получаваш изплащания като доставчик."
+          size="compact"
+          className="py-6"
+        />
       ) : (
         <form onSubmit={handleSubmit(d => save.mutate(d))} className="space-y-3">
           <Input label="IBAN" placeholder="BG80 BNBG 9661 1020 3456 78" {...register('iban')} error={errors.iban?.message} />
@@ -307,10 +315,14 @@ export default function PaymentsPage() {
             {[1, 2].map(i => <div key={i} className="h-16 bg-white rounded-2xl animate-pulse" />)}
           </div>
         ) : cards.length === 0 ? (
-          <div className="py-10 text-center text-surface-400">
-            <CreditCard size={32} className="mx-auto mb-2 text-surface-200" />
-            <p className="text-sm">Нямаш запазени карти</p>
-          </div>
+          <EmptyState
+            icon={CreditCard}
+            tone="brand"
+            title="Нямаш запазени карти"
+            description="Добави карта за по-бързо плащане при резервации."
+            size="compact"
+            className="py-10"
+          />
         ) : (
           <div className="space-y-2">
             {cards.map(card => (

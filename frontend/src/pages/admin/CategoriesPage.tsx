@@ -68,7 +68,13 @@ export default function AdminCategoriesPage() {
         </div>
       </div>
       <div className="max-w-4xl mx-auto px-5 py-5">
-        <DataTable data={categories} columns={columns} searchPlaceholder="Търси категория..." />
+        <DataTable
+          data={categories}
+          columns={columns}
+          searchPlaceholder="Търси категория..."
+          emptyTitle="Няма категории"
+          emptyDescription="Добави категории или синхронизирай с базата данни."
+        />
       </div>
     </AnimatedPage>
   )

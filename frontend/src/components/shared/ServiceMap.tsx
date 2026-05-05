@@ -56,10 +56,10 @@ function ServicePopup({ service, onClose }: { service: ServiceWithRelations; onC
   return (
     <div className="relative bg-white rounded-2xl overflow-hidden w-56" style={{ boxShadow: 'var(--shadow-card-hover)' }}>
       {service.images[0] && (
-        <img src={service.images[0]} alt={service.title} className="w-full h-28 object-cover" />
+        <img src={service.images[0]} alt={service.title} className="w-full h-28 object-cover" loading="lazy" decoding="async" />
       )}
-      <button onClick={onClose} className="absolute top-2 right-2 w-6 h-6 bg-black/40 rounded-full flex items-center justify-center text-white hover:bg-black/60 transition-colors">
-        <X size={12} />
+      <button type="button" onClick={onClose} aria-label="Затвори" className="absolute top-2 right-2 w-6 h-6 bg-black/40 rounded-full flex items-center justify-center text-white hover:bg-black/60 transition-colors">
+        <X size={12} aria-hidden />
       </button>
       <div className="p-3">
         <p className="font-semibold text-sm text-surface-800 line-clamp-2 leading-snug">{service.title}</p>

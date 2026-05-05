@@ -1,7 +1,7 @@
 ﻿import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { ArrowLeft, Send, Paperclip, MoreVertical, Flag, Ban, X, Image, CheckCheck } from 'lucide-react'
+import { ArrowLeft, Send, Paperclip, MoreVertical, Flag, Ban, X, Image, CheckCheck, MessageCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import { format } from 'date-fns'
@@ -13,6 +13,7 @@ import { apiGetProfile } from '@/api/profiles'
 import { useAuthStore } from '@/stores/authStore'
 import { Avatar } from '@/components/ui/Avatar'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { clsx } from 'clsx'
 import type { ProfileRow } from '@/types/database'
 
@@ -175,6 +176,17 @@ export default function ChatDetailPage() {
       <div className="flex-1 overflow-y-auto px-4 py-4 max-w-2xl mx-auto w-full space-y-2">
         {/* Close menu overlay */}
         {showMenu && <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />}
+
+        {messages.length === 0 && (
+          <EmptyState
+            icon={MessageCircle}
+            tone="teal"
+            title="Още няма съобщения"
+            description="Напиши първото съобщение по-долу."
+            size="compact"
+            className="py-10"
+          />
+        )}
 
         <AnimatePresence initial={false}>
           {messages.map((msg, i) => {

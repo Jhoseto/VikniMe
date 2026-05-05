@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { staggerContainer, staggerItem } from '@/lib/motion'
 import { clsx } from 'clsx'
 import type { BookingRow } from '@/types/database'
@@ -130,10 +131,14 @@ export default function SupplierBookingsPage() {
         {isLoading ? (
           <div className="space-y-3">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-28 rounded-2xl" />)}</div>
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <CalendarDays size={40} className="text-surface-200 mb-3" />
-            <p className="font-semibold text-surface-600">Няма резервации в тази категория</p>
-          </div>
+          <EmptyState
+            icon={CalendarDays}
+            tone="teal"
+            title="Няма резервации в тази категория"
+            description="Промени категорията по-горе или изчакай нови заявки."
+            size="compact"
+            className="py-16"
+          />
         ) : (
           <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-3">
             {filtered.map(b => <BookingCard key={b.id} booking={b} />)}

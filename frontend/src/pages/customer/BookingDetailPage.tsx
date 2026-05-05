@@ -43,8 +43,12 @@ function CancelSheet({ open, onClose, onCancel, loading, price }: CancelSheetPro
     <Drawer.Root open={open} onOpenChange={onClose}>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-40 bg-black/40" />
-        <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-3xl bg-white safe-bottom" aria-label="Отмяна на резервация">
-          <div className="w-10 h-1 bg-surface-200 rounded-full mx-auto mt-3 mb-4 shrink-0" />
+        <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-3xl bg-white safe-bottom pad-x-safe">
+          <Drawer.Title className="sr-only">Отмяна на резервация</Drawer.Title>
+          <Drawer.Description className="sr-only">
+            Избери причина за отмяна и потвърди. Виж политиката за възстановяване на суми.
+          </Drawer.Description>
+          <div className="w-10 h-1 bg-surface-200 rounded-full mx-auto mt-3 mb-4 shrink-0" aria-hidden />
           <div className="px-5 pb-6">
             <div className="flex items-center gap-3 mb-5">
               <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
@@ -60,7 +64,8 @@ function CancelSheet({ open, onClose, onCancel, loading, price }: CancelSheetPro
             <div className="mb-4">
               <label className="text-xs font-semibold text-surface-600 uppercase tracking-wide mb-1.5 block">Причина</label>
               <select value={reason} onChange={e => setReason(e.target.value)}
-                className="w-full h-11 px-3 bg-surface-50 border border-surface-200 rounded-xl text-sm outline-none focus:border-navy-400 transition-colors">
+                aria-label="Причина за отмяна"
+                className="w-full h-11 px-3 bg-surface-50 border border-surface-200 rounded-xl text-sm outline-none focus:border-navy-400 focus-visible:ring-2 focus-visible:ring-orange-400/40 focus-visible:ring-offset-1 transition-colors">
                 <option value="">-- Избери причина --</option>
                 {CANCEL_REASONS.map(r => <option key={r}>{r}</option>)}
               </select>
@@ -179,7 +184,7 @@ export default function BookingDetailPage() {
           {/* Service */}
           <div className="flex items-center gap-3 py-3 border-y border-surface-100 my-3">
             {booking.service.images[0] ? (
-              <img src={booking.service.images[0]} alt={booking.service.title} className="w-14 h-14 rounded-xl object-cover shrink-0" />
+              <img src={booking.service.images[0]} alt={booking.service.title} className="w-14 h-14 rounded-xl object-cover shrink-0" loading="lazy" decoding="async" />
             ) : (
               <div className="w-14 h-14 rounded-xl shrink-0" style={{ background: 'var(--gradient-brand)' }} />
             )}

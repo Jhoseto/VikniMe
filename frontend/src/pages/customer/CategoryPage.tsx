@@ -8,6 +8,7 @@ import { apiGetServicesByCategory, apiGetCategoryBySlug, type ServiceWithRelatio
 import { ServiceCard } from '@/components/shared/ServiceCard'
 import { SkeletonCard } from '@/components/ui/Skeleton'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { staggerContainer, staggerItem } from '@/lib/motion'
 import { clsx } from 'clsx'
 import type { CategoryRow } from '@/types/database'
@@ -133,14 +134,13 @@ export default function CategoryPage() {
             {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
           </div>
         ) : services.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5"
-              style={{ background: header.gradient }}>
-              <HeaderIcon size={34} strokeWidth={1.5} className="text-white" />
-            </div>
-            <h3 className="font-display font-bold text-surface-700 text-lg mb-2">Все още няма услуги</h3>
-            <p className="text-surface-400 text-sm">Бъди първият доставчик в тази категория!</p>
-          </div>
+          <EmptyState
+            icon={HeaderIcon}
+            tone="teal"
+            title="Все още няма услуги"
+            description="Бъди първият доставчик в тази категория!"
+            iconBackground={header.gradient}
+          />
         ) : (
           <motion.div variants={staggerContainer} initial="initial" animate="animate"
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

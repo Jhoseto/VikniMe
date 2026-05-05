@@ -25,6 +25,7 @@ import { Button } from '@/components/ui/Button'
 import { StarRating } from '@/components/ui/StarRating'
 import { Skeleton, SkeletonText } from '@/components/ui/Skeleton'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { Lightbox } from '@/components/shared/Lightbox'
 import { fadeUp, staggerContainer, staggerItem } from '@/lib/motion'
 import { clsx } from 'clsx'
@@ -415,7 +416,14 @@ export default function ServiceDetailPage() {
 
             <h2 className="font-display font-bold text-navy-500 mb-4">Отзиви</h2>
             {reviews.length === 0 ? (
-              <p className="text-surface-400 text-sm">Все още няма отзиви.</p>
+              <EmptyState
+                icon={Star}
+                tone="teal"
+                title="Все още няма отзиви"
+                description="След първите оценки от клиенти, те ще се покажат тук."
+                size="compact"
+                className="py-8"
+              />
             ) : (
               <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-5 divide-y divide-surface-100">
                 {reviews.map(r => (

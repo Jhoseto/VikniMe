@@ -166,9 +166,13 @@ export function SupportWidget() {
         <Drawer.Root open={open} onOpenChange={setOpen}>
           <Drawer.Portal>
             <Drawer.Overlay className="fixed inset-0 z-40 bg-black/40" />
-            <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-3xl overflow-hidden bg-white" style={{ height: '75vh' }}>
-              <div className="w-10 h-1 bg-surface-200 rounded-full mx-auto mt-3 mb-1 shrink-0" />
-              <button onClick={() => setOpen(false)}
+            <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-3xl overflow-hidden bg-white safe-bottom pad-x-safe" style={{ height: '75vh' }}>
+              <Drawer.Title className="sr-only">Поддръжка и въпроси</Drawer.Title>
+              <Drawer.Description className="sr-only">
+                Чат с екипа на Vikni.me. Пиши съобщение по-долу.
+              </Drawer.Description>
+              <div className="w-10 h-1 bg-surface-200 rounded-full mx-auto mt-3 mb-1 shrink-0" aria-hidden />
+              <button type="button" onClick={() => setOpen(false)}
                 className="absolute top-4 right-4 w-8 h-8 bg-surface-100 rounded-full flex items-center justify-center text-surface-500 hover:bg-surface-200 transition-colors z-10"
                 aria-label="Затвори">
                 <X size={16} />

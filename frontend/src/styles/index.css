@@ -150,6 +150,7 @@
 }
 
 html {
+  color-scheme: light;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth;
@@ -178,6 +179,12 @@ body {
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
 .safe-left   { padding-left: env(safe-area-inset-left, 0px); }
 .safe-right  { padding-right: env(safe-area-inset-right, 0px); }
+
+/* At least 1rem inset from edges *or* notch — use on floating chrome / full-bleed rows */
+.pad-x-safe {
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
+}
 
 /* ── Typography Utilities ─────────────────────────────── */
 h1, h2, h3, h4, h5, h6 {

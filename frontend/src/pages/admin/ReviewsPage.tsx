@@ -100,7 +100,12 @@ export default function AdminReviewsPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-5 py-6">
-        <DataTable data={data} columns={columns} />
+        <DataTable
+          data={data}
+          columns={columns}
+          emptyTitle="Няма отзиви"
+          emptyDescription="Отзивите от клиенти ще се виждат тук след синхронизация."
+        />
       </div>
     </AnimatedPage>
   )

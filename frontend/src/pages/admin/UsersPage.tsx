@@ -105,7 +105,13 @@ export default function AdminUsersPage() {
         </div>
       </div>
       <div className="max-w-6xl mx-auto px-5 py-5">
-        <DataTable data={users} columns={columns} searchPlaceholder="Търси потребител..." />
+        <DataTable
+          data={users}
+          columns={columns}
+          searchPlaceholder="Търси потребител..."
+          emptyTitle="Няма потребители"
+          emptyDescription="Списъкът ще се попълни от базата данни, когато свържеш админ панела."
+        />
       </div>
     </AnimatedPage>
   )

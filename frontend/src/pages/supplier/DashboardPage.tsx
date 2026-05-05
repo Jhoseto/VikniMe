@@ -14,6 +14,7 @@ import { Avatar } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { staggerContainer, staggerItem } from '@/lib/motion'
 import type { BookingRow } from '@/types/database'
 
@@ -190,9 +191,14 @@ export default function SupplierDashboardPage() {
           {isLoading ? (
             <div className="space-y-2">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-16 rounded-2xl" />)}</div>
           ) : bookings.length === 0 ? (
-            <div className="bg-white rounded-2xl p-6 text-center" style={{ boxShadow: 'var(--shadow-card)' }}>
-              <CalendarDays size={32} className="mx-auto text-surface-200 mb-2" />
-              <p className="text-surface-400 text-sm">Нямаш резервации все още.</p>
+            <div className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: 'var(--shadow-card)' }}>
+              <EmptyState
+                icon={CalendarDays}
+                tone="teal"
+                title="Нямаш резервации все още"
+                size="compact"
+                className="py-10 px-4"
+              />
             </div>
           ) : (
             <div className="bg-white rounded-2xl overflow-hidden divide-y divide-surface-100" style={{ boxShadow: 'var(--shadow-card)' }}>

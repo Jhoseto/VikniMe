@@ -87,7 +87,13 @@ export default function AdminServicesPage() {
         </div>
       </div>
       <div className="max-w-6xl mx-auto px-5 py-5">
-        <DataTable data={services} columns={columns} searchPlaceholder="Търси услуга..." />
+        <DataTable
+          data={services}
+          columns={columns}
+          searchPlaceholder="Търси услуга..."
+          emptyTitle="Няма услуги"
+          emptyDescription="Публикуваните услуги ще се заредят от базата данни."
+        />
       </div>
     </AnimatedPage>
   )

@@ -45,7 +45,9 @@ export function BottomNavBar() {
       }}
       aria-label="Основна навигация"
     >
-      <ul className="flex items-stretch px-1 pt-1.5">
+      <ul
+        className="flex items-stretch pt-1.5 pl-[max(0.25rem,env(safe-area-inset-left,0px))] pr-[max(0.25rem,env(safe-area-inset-right,0px))]"
+      >
         {NAV_ITEMS.map(({ to, label, Icon, exact }) => {
           const isActive = exact
             ? location.pathname === to
@@ -58,7 +60,7 @@ export function BottomNavBar() {
                 to={to}
                 onClick={() => trigger('light')}
                 aria-current={isActive ? 'page' : undefined}
-                className="relative flex flex-col items-center gap-1 pt-1 pb-2 select-none"
+                className="relative flex flex-col items-center gap-1 pt-1 pb-2 select-none rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               >
                 {/* Top gradient indicator */}
                 {isActive && (

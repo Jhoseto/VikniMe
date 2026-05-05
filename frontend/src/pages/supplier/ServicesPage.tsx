@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { staggerContainer, staggerItem } from '@/lib/motion'
 
 function ServiceRow({ service }: { service: ServiceWithRelations }) {
@@ -32,7 +33,7 @@ function ServiceRow({ service }: { service: ServiceWithRelations }) {
       {/* Thumbnail */}
       <div className="w-24 h-24 shrink-0 bg-surface-100">
         {service.images[0] ? (
-          <img src={service.images[0]} alt={service.title} className="w-full h-full object-cover" />
+          <img src={service.images[0]} alt={service.title} className="w-full h-full object-cover" loading="lazy" decoding="async" />
         ) : (
           <div className="w-full h-full" style={{ background: 'var(--gradient-brand)' }} />
         )}
@@ -111,16 +112,16 @@ export default function SupplierServicesPage() {
             {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-24 rounded-2xl" />)}
           </div>
         ) : services.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-20 h-20 rounded-full bg-surface-100 flex items-center justify-center mb-4">
-              <Plus size={32} className="text-surface-300" />
-            </div>
-            <h3 className="font-display font-bold text-surface-700 mb-2">Нямаш добавени услуги</h3>
-            <p className="text-surface-400 text-sm mb-5">Добави първата си услуга и започни да получаваш резервации!</p>
+          <EmptyState
+            icon={Plus}
+            tone="brand"
+            title="Нямаш добавени услуги"
+            description="Добави първата си услуга и започни да получаваш резервации!"
+          >
             <Button onClick={() => navigate('/supplier/services/new')} leftIcon={<Plus size={16} />}>
               Добави услуга
             </Button>
-          </div>
+          </EmptyState>
         ) : (
           <>
             <p className="text-sm text-surface-500 mb-4">{services.length} {services.length === 1 ? 'услуга' : 'услуги'}</p>

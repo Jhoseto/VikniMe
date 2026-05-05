@@ -11,6 +11,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { Button } from '@/components/ui/Button'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { staggerContainer, staggerItem } from '@/lib/motion'
 import { clsx } from 'clsx'
 import type { NotificationRow } from '@/types/database'
@@ -180,14 +181,14 @@ export default function NotificationsPage() {
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-20 h-20 rounded-3xl flex items-center justify-center mb-5 shadow-lg"
-              style={{ background: 'linear-gradient(135deg,#1B2A5E 0%,#7C4DCC 100%)' }}>
-              <Bell size={34} strokeWidth={1.75} className="text-white" />
-            </div>
-            <h3 className="font-display font-bold text-surface-800 text-lg mb-2">Няма известия</h3>
-            <p className="text-surface-400 text-sm max-w-[240px]">Тук ще виждаш актуализации за резервации, съобщения и промоции.</p>
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+            <EmptyState
+              icon={Bell}
+              tone="brand"
+              title="Няма известия"
+              description="Тук ще виждаш актуализации за резервации, съобщения и промоции."
+              iconBackground="linear-gradient(135deg,#1B2A5E 0%,#7C4DCC 100%)"
+            />
           </motion.div>
         ) : (
           <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-3">

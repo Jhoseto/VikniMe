@@ -101,13 +101,16 @@ export function ReviewPrompt() {
     <Drawer.Root open={open} onOpenChange={setOpen}>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-40 bg-black/40" />
-        <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-3xl overflow-hidden bg-white safe-bottom"
-          aria-label="Оцени услугата">
+        <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-3xl overflow-hidden bg-white safe-bottom pad-x-safe">
+          <Drawer.Title className="sr-only">Оцени услугата</Drawer.Title>
+          <Drawer.Description className="sr-only">
+            Избери звезди и продължи към отзив или отложи напомнянето.
+          </Drawer.Description>
           {/* Handle */}
-          <div className="w-10 h-1 bg-surface-200 rounded-full mx-auto mt-3 mb-4 shrink-0" />
+          <div className="w-10 h-1 bg-surface-200 rounded-full mx-auto mt-3 mb-4 shrink-0" aria-hidden />
 
           {/* Dismiss */}
-          <button onClick={handleDismiss}
+          <button type="button" onClick={handleDismiss}
             className="absolute top-4 right-4 w-8 h-8 rounded-full bg-surface-100 hover:bg-surface-200 flex items-center justify-center text-surface-400 transition-colors"
             aria-label="Затвори">
             <X size={16} />
@@ -136,7 +139,8 @@ export function ReviewPrompt() {
                   onClick={() => setRating(n)}
                   whileTap={{ scale: 1.3 }}
                   animate={{ scale: n <= (hover || rating) ? 1.15 : 1 }}
-                  className="focus:outline-none" aria-label={`${n} звезди`}>
+                  className="rounded-full p-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
+                  aria-label={`${n} звезди`}>
                   <Star size={36}
                     className={clsx('transition-colors', n <= (hover || rating) ? 'text-orange-400 fill-orange-400' : 'text-surface-200 fill-surface-200')} />
                 </motion.button>

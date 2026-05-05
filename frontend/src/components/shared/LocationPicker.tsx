@@ -11,6 +11,7 @@ import { MapPin, LocateFixed, Search, X, Check } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { clsx } from 'clsx'
 import { BG_ALL_BG_CITIES } from '@/lib/mock/bg-cities'
+import { EmptyState } from '@/components/shared/EmptyState'
 
 const BG_CITIES = [...BG_ALL_BG_CITIES]
 
@@ -27,7 +28,15 @@ const ME_GRADIENT = 'linear-gradient(135deg,#7C4DCC 0%,#2DD4BF 100%)'
 function CityList({ query, selected, onSelect }: { query: string; selected: string; onSelect: (c: string) => void }) {
   const filtered = BG_CITIES.filter(c => c.toLowerCase().includes(query.toLowerCase()))
   if (filtered.length === 0) {
-    return <p className="text-sm text-surface-400 text-center py-6">Няма намерени градове</p>
+    return (
+      <EmptyState
+        icon={MapPin}
+        title="Няма намерени градове"
+        tone="teal"
+        size="compact"
+        className="py-6 px-2"
+      />
+    )
   }
   return (
     <ul className="space-y-0.5">

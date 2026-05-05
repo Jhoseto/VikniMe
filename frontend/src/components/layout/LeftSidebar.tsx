@@ -71,8 +71,9 @@ function NavItem({ to, label, Icon, exact, collapsed, badgeCount }: NavItemProps
         className={({ isActive }) =>
           clsx(
             'flex items-center gap-3 rounded-xl transition-all duration-150 relative overflow-hidden',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
             collapsed ? 'justify-center w-10 h-10 mx-auto' : 'px-3 py-2.5',
-            isActive ? 'font-semibold' : 'text-surface-500 hover:text-surface-800 hover:bg-surface-50/80'
+            isActive ? 'font-semibold' : 'text-surface-500 hover:text-surface-800 hover:bg-surface-50/80 active:bg-surface-100/80'
           )
         }
         style={({ isActive }) =>
@@ -236,7 +237,7 @@ export function LeftSidebar() {
       <div className="shrink-0 border-t border-surface-100 p-2">
         {profile ? (
           <Link to="/profile"
-            className="flex items-center gap-3 rounded-xl hover:bg-surface-50 transition-colors overflow-hidden"
+            className="flex items-center gap-3 rounded-xl hover:bg-surface-50 active:bg-surface-100/80 transition-colors overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             style={{ padding: collapsed ? '8px 0' : '8px 10px' }}>
             {/* Avatar */}
             <div className="shrink-0 mx-auto" style={collapsed ? {} : { marginLeft: 0 }}>

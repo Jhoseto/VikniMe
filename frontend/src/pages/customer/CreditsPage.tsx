@@ -1,11 +1,12 @@
 ﻿import { Helmet } from 'react-helmet-async'
-import { ArrowLeft, Wallet, Gift } from 'lucide-react'
+import { ArrowLeft, Wallet, Gift, History } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useAuthStore } from '@/stores/authStore'
 import { Button } from '@/components/ui/Button'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { staggerContainer, staggerItem } from '@/lib/motion'
 
 const MOCK_TRANSACTIONS = [
@@ -84,24 +85,37 @@ export default function CreditsPage() {
         {/* Transaction history */}
         <div>
           <h2 className="font-display font-bold text-navy-500 mb-3">История</h2>
-          <motion.div variants={staggerContainer} initial="initial" animate="animate"
-            className="bg-white rounded-2xl overflow-hidden divide-y divide-surface-100" style={{ boxShadow: 'var(--shadow-card)' }}>
-            {MOCK_TRANSACTIONS.map(t => (
-              <motion.div key={t.id} variants={staggerItem}
-                className="flex items-center gap-3.5 px-4 py-3.5">
-                <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0 ${t.type === 'credit' ? 'bg-green-50' : 'bg-orange-50'}`}>
-                  {t.type === 'credit' ? '➕' : '➖'}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-surface-800 truncate">{t.label}</p>
-                  <p className="text-xs text-surface-400">{t.date}</p>
-                </div>
-                <span className={`font-bold text-sm ${t.amount > 0 ? 'text-green-600' : 'text-orange-500'}`}>
-                  {t.amount > 0 ? '+' : ''}{t.amount} кр.
-                </span>
-              </motion.div>
-            ))}
-          </motion.div>
+          {MOCK_TRANSACTIONS.length === 0 ? (
+            <div className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: 'var(--shadow-card)' }}>
+              <EmptyState
+                icon={History}
+                tone="teal"
+                title="Няма движения по сметката"
+                description="Тук ще виждаш бонуси, резервации и покани."
+                size="compact"
+                className="py-10"
+              />
+            </div>
+          ) : (
+            <motion.div variants={staggerContainer} initial="initial" animate="animate"
+              className="bg-white rounded-2xl overflow-hidden divide-y divide-surface-100" style={{ boxShadow: 'var(--shadow-card)' }}>
+              {MOCK_TRANSACTIONS.map(t => (
+                <motion.div key={t.id} variants={staggerItem}
+                  className="flex items-center gap-3.5 px-4 py-3.5">
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0 ${t.type === 'credit' ? 'bg-green-50' : 'bg-orange-50'}`}>
+                    {t.type === 'credit' ? '➕' : '➖'}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-surface-800 truncate">{t.label}</p>
+                    <p className="text-xs text-surface-400">{t.date}</p>
+                  </div>
+                  <span className={`font-bold text-sm ${t.amount > 0 ? 'text-green-600' : 'text-orange-500'}`}>
+                    {t.amount > 0 ? '+' : ''}{t.amount} кр.
+                  </span>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
         </div>
       </div>
 

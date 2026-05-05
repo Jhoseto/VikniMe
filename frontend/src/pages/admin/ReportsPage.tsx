@@ -1,6 +1,7 @@
 ﻿import { Helmet } from 'react-helmet-async'
 import { AlertTriangle } from 'lucide-react'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 
 export default function AdminReportsPage() {
   return (
@@ -11,10 +12,13 @@ export default function AdminReportsPage() {
           <h1 className="font-display text-xl font-bold text-navy-500">Доклади</h1>
         </div>
       </div>
-      <div className="max-w-4xl mx-auto px-5 py-16 text-center">
-        <AlertTriangle size={40} className="mx-auto text-surface-200 mb-3" />
-        <p className="text-surface-500 font-medium">Няма подадени доклади</p>
-        <p className="text-surface-400 text-sm mt-1">Тук ще виждаш сигнали от потребители.</p>
+      <div className="max-w-4xl mx-auto px-5 py-12">
+        <EmptyState
+          icon={AlertTriangle}
+          tone="brand"
+          title="Няма подадени доклади"
+          description="Тук ще виждаш сигнали от потребители."
+        />
       </div>
     </AnimatedPage>
   )

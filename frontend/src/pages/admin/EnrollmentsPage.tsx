@@ -111,7 +111,13 @@ export default function AdminEnrollmentsPage() {
         </div>
       </div>
       <div className="max-w-6xl mx-auto px-5 py-5">
-        <DataTable data={enrollments} columns={columns} searchPlaceholder="Търси заявка..." />
+        <DataTable
+          data={enrollments}
+          columns={columns}
+          searchPlaceholder="Търси заявка..."
+          emptyTitle="Няма заявки"
+          emptyDescription="Новите заявки за доставчик ще се появят тук."
+        />
       </div>
     </AnimatedPage>
   )

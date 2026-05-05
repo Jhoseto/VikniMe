@@ -4,7 +4,7 @@
  * – iOS: detects standalone mode absence + Safari, shows manual instructions
  */
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { X, Download, Share } from 'lucide-react'
 
 interface BeforeInstallPromptEvent extends Event {
@@ -21,6 +21,7 @@ function isInStandaloneMode() {
 }
 
 export function InstallBanner() {
+  const reducedMotion = useReducedMotion()
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [showIOS,        setShowIOS]        = useState(false)
   const [dismissed,      setDismissed]      = useState(false)
@@ -61,11 +62,17 @@ export function InstallBanner() {
     <AnimatePresence>
       {visible && (
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          className="fixed left-4 right-4 lg:left-auto lg:right-6 lg:w-96 z-50"
+          role="region"
+          aria-label="Инсталация на приложението"
+          initial={reducedMotion ? { opacity: 0 } : { y: 100, opacity: 0 }}
+          animate={reducedMotion ? { opacity: 1 } : { y: 0, opacity: 1 }}
+          exit={reducedMotion ? { opacity: 0 } : { y: 100, opacity: 0 }}
+          transition={
+            reducedMotion
+              ? { duration: 0.15 }
+              : { type: 'spring', stiffness: 400, damping: 30 }
+          }
+          className="fixed inset-x-0 z-50 max-lg:pad-x-safe lg:inset-x-auto lg:right-6 lg:left-auto lg:w-96"
           style={{ bottom: 'calc(80px + env(safe-area-inset-bottom, 0px))' }}
         >
           <div className="bg-white rounded-2xl p-4 flex items-start gap-3" style={{ boxShadow: 'var(--shadow-card-hover)' }}>
@@ -79,17 +86,17 @@ export function InstallBanner() {
               <p className="font-semibold text-sm text-surface-800">Инсталирай Vikni.me</p>
               {showIOS ? (
                 <p className="text-xs text-surface-500 mt-0.5 leading-relaxed">
-                  Натисни <Share size={12} className="inline" /> и след това „Добави на начален екран"
+                  Натисни <Share size={12} className="inline" aria-hidden /> и след това „Добави на начален екран"
                 </p>
               ) : (
-                <p className="text-xs text-surface-500 mt-0.5">Инсталирай на мобилното си Устройство</p>
+                <p className="text-xs text-surface-500 mt-0.5">Инсталирай на мобилното си устройство.</p>
               )}
 
               {!showIOS && (
                 <button onClick={handleInstall}
                   className="mt-2 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white hover:opacity-90 transition-opacity"
                   style={{ background: 'var(--gradient-brand)' }}>
-                  <Download size={12} /> Инсталирай
+                  <Download size={12} aria-hidden /> Инсталирай
                 </button>
               )}
             </div>

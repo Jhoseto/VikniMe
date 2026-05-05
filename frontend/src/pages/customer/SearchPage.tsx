@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import {
   Search, SlidersHorizontal, X, ChevronDown, Map as MapIcon, LayoutGrid,
   HeartHandshake, Mountain, Sparkles, Gem, ChefHat, Camera,
-  Music2, GraduationCap, PawPrint, Dumbbell, Wrench, ArrowUpDown,
+  Music2, GraduationCap, PawPrint, Dumbbell, Wrench, ArrowUpDown, WifiOff,
   type LucideIcon,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -15,6 +15,7 @@ import { ServiceCard } from '@/components/shared/ServiceCard'
 import { SkeletonCard } from '@/components/ui/Skeleton'
 import { Button } from '@/components/ui/Button'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { LocationPicker } from '@/components/shared/LocationPicker'
 import { staggerContainer, staggerItem } from '@/lib/motion'
 import { clsx } from 'clsx'
@@ -71,7 +72,7 @@ function FilterContent({ local, setLocal, categories, onReset, onApply, isSheet 
   const activeRange = PRICE_RANGES.findIndex(r => r.min === local.minPrice && r.max === local.maxPrice)
 
   return (
-    <div className={clsx('space-y-6', isSheet ? 'px-5 py-4' : 'px-4 pt-4 pb-6')}>
+    <div className={clsx('space-y-6', isSheet ? 'py-4 pad-x-safe' : 'px-4 pt-4 pb-6')}>
 
       {/* Location — FIRST */}
       <div>
@@ -221,14 +222,14 @@ function FilterSheet({ open, onClose, categories, filters, onApply }:
             <div className="flex justify-center pt-3 pb-1">
               <div className="w-10 h-1 rounded-full bg-surface-300" />
             </div>
-            <div className="flex items-center justify-between px-5 py-3 border-b border-surface-100">
+            <div className="flex items-center justify-between py-3 border-b border-surface-100 pad-x-safe">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: ME_GRADIENT }}>
                   <SlidersHorizontal size={15} className="text-white" />
                 </div>
                 <h2 className="font-display font-bold text-navy-600">Филтри</h2>
               </div>
-              <button onClick={onClose} className="p-2 rounded-full hover:bg-surface-100 transition-colors">
+              <button type="button" onClick={onClose} aria-label="Затвори филтрите" className="p-2 rounded-full hover:bg-surface-100 transition-colors">
                 <X size={18} className="text-surface-500" />
               </button>
             </div>
@@ -274,7 +275,8 @@ export default function SearchPage() {
   })
 
   const activeFilters = { ...filters, query: debouncedQuery }
-  const { data: results = [], isLoading, isFetching } = useSearch(activeFilters)
+  const { data: results = [], isPending, isFetching, isError, refetch } = useSearch(activeFilters)
+  const showResultsSkeleton = isPending || (isFetching && results.length === 0)
   const { data: categories = [] } = useQuery<CategoryRow[]>({ queryKey: ['categories'], queryFn: apiGetCategories })
 
   const handleQueryChange = useCallback((q: string) => {
@@ -318,7 +320,7 @@ export default function SearchPage() {
               value={inputValue}
               onChange={e => handleQueryChange(e.target.value)}
               placeholder="Търси услуга или специалист..."
-              className="w-full h-11 pl-10 pr-10 bg-surface-50 border-2 border-surface-200 rounded-2xl text-sm font-medium outline-none transition-all placeholder:text-surface-400 focus:bg-white focus:border-violet-400"
+              className="w-full h-11 pl-10 pr-10 bg-surface-50 border-2 border-surface-200 rounded-2xl text-sm font-medium outline-none transition-all placeholder:text-surface-400 focus:bg-white focus:border-violet-400 focus-visible:ring-2 focus-visible:ring-violet-400/35 focus-visible:ring-offset-1"
               onFocus={e => e.currentTarget.style.borderColor = '#7C4DCC'}
               onBlur={e => e.currentTarget.style.borderColor = ''}
               aria-label="Търсене"
@@ -455,7 +457,9 @@ export default function SearchPage() {
             {/* Results meta row */}
             <div className="flex items-center justify-between mb-4 gap-3">
               <p className="text-sm text-surface-500 shrink-0">
-                {isLoading ? (
+                {isError ? (
+                  <span className="text-surface-400">—</span>
+                ) : showResultsSkeleton ? (
                   <span className="animate-pulse">Търсене…</span>
                 ) : (
                   <>
@@ -472,7 +476,7 @@ export default function SearchPage() {
                 <select
                   value={filters.sortBy ?? 'rating'}
                   onChange={e => setFilters(f => ({ ...f, sortBy: e.target.value as SortValue }))}
-                  className="appearance-none pl-3 pr-7 py-1.5 text-xs font-semibold bg-surface-50 border-2 border-surface-100 rounded-xl text-surface-600 outline-none cursor-pointer"
+                  className="appearance-none pl-3 pr-7 py-1.5 text-xs font-semibold bg-surface-50 border-2 border-surface-100 rounded-xl text-surface-600 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-violet-400/35 focus-visible:ring-offset-1"
                 >
                   {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
@@ -480,27 +484,39 @@ export default function SearchPage() {
             </div>
 
             {/* Cards */}
-            {isLoading || isFetching ? (
+            {isError ? (
+              <EmptyState
+                icon={WifiOff}
+                tone="danger"
+                title="Неуспешно зареждане"
+                description="Провери връзката с интернет и опитай отново."
+                size="hero"
+              >
+                <Button type="button" variant="primary" onClick={() => refetch()}>
+                  Опитай отново
+                </Button>
+              </EmptyState>
+            ) : showResultsSkeleton ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                 {Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)}
               </div>
             ) : results.length === 0 ? (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col items-center justify-center py-24 text-center">
-                <div className="w-20 h-20 rounded-3xl flex items-center justify-center mb-5 shadow-lg"
-                  style={{ background: ME_GRADIENT }}>
-                  <Search size={32} strokeWidth={1.75} className="text-white" />
-                </div>
-                <h3 className="font-display font-bold text-surface-800 text-xl mb-2">Няма намерени резултати</h3>
-                <p className="text-surface-400 text-sm max-w-[280px] mb-6">
-                  Опитай с различна дума или промени филтрите.
-                </p>
-                <Button
-                  variant="outline"
-                  onClick={() => { handleQueryChange(''); handleApplyFilters({ sortBy: 'rating' }) }}
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <EmptyState
+                  className="[&_h3]:text-xl"
+                  icon={Search}
+                  title="Няма намерени резултати"
+                  description="Опитай с различна дума или промени филтрите."
+                  iconBackground={ME_GRADIENT}
+                  tone="teal"
                 >
-                  Изчисти търсенето
-                </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => { handleQueryChange(''); handleApplyFilters({ sortBy: 'rating' }) }}
+                  >
+                    Изчисти търсенето
+                  </Button>
+                </EmptyState>
               </motion.div>
             ) : (
               <motion.div variants={staggerContainer} initial="initial" animate="animate"

@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
 import { WifiOff, RefreshCw } from 'lucide-react'
 import { fadeUp } from '@/lib/motion'
+import { EmptyState } from '@/components/shared/EmptyState'
+import { Button } from '@/components/ui/Button'
 
 export function OfflinePage() {
   return (
@@ -8,22 +10,25 @@ export function OfflinePage() {
       variants={fadeUp}
       initial="initial"
       animate="animate"
-      className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-surface-50"
+      className="min-h-screen flex flex-col items-center justify-center px-6 bg-surface-50"
     >
-      <div className="w-24 h-24 rounded-3xl bg-surface-200 flex items-center justify-center mb-6">
-        <WifiOff size={40} className="text-surface-400" />
-      </div>
-      <h1 className="font-display text-2xl font-bold text-surface-800 mb-2">Офлайн режим</h1>
-      <p className="text-surface-500 mb-8 max-w-xs">
-        Нямаш интернет връзка. Провери мрежата си и опитай отново.
-      </p>
-      <button
-        onClick={() => window.location.reload()}
-        className="flex items-center gap-2 px-6 py-3 rounded-full bg-navy-500 text-white font-semibold text-sm hover:bg-navy-600 transition-colors"
+      <EmptyState
+        icon={WifiOff}
+        tone="danger"
+        title="Офлайн режим"
+        description="Нямаш интернет връзка. Провери мрежата си и опитай отново."
+        size="compact"
+        className="py-8"
       >
-        <RefreshCw size={16} />
-        Опитай отново
-      </button>
+        <Button
+          type="button"
+          variant="primary"
+          onClick={() => window.location.reload()}
+          leftIcon={<RefreshCw size={16} aria-hidden />}
+        >
+          Опитай отново
+        </Button>
+      </EmptyState>
     </motion.div>
   )
 }

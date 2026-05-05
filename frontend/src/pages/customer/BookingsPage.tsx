@@ -12,6 +12,7 @@ import { Avatar } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { AnimatedPage } from '@/components/shared/AnimatedPage'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { staggerContainer, staggerItem } from '@/lib/motion'
 import { clsx } from 'clsx'
 import type { BookingRow } from '@/types/database'
@@ -53,7 +54,7 @@ function BookingCard({ booking }: { booking: BookingWithRelations }) {
         <div className="relative shrink-0">
           {booking.service.images[0] ? (
             <img src={booking.service.images[0]} alt={booking.service.title}
-              className="w-16 h-16 rounded-xl object-cover" />
+              className="w-16 h-16 rounded-xl object-cover" loading="lazy" decoding="async" />
           ) : (
             <div className="w-16 h-16 rounded-xl flex items-center justify-center" style={{ background: 'var(--gradient-brand)' }}>
               <CalendarDays size={20} className="text-white" />
@@ -147,24 +148,24 @@ export default function BookingsPage() {
             ))}
           </div>
         ) : current.length === 0 ? (
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-20 h-20 rounded-3xl flex items-center justify-center mb-5 shadow-lg"
-              style={{ background: 'linear-gradient(135deg,#7C4DCC 0%,#2DD4BF 100%)' }}>
-              <CalendarDays size={34} strokeWidth={1.75} className="text-white" />
-            </div>
-            <h3 className="font-display font-bold text-surface-800 text-lg mb-2">
-              {tab === 'upcoming' ? 'Нямаш предстоящи резервации' : 'Нямаш минали резервации'}
-            </h3>
-            <p className="text-surface-400 text-sm mb-6 max-w-[240px]">
-              {tab === 'upcoming' ? 'Намери услуга и направи резервация!' : 'Тук ще виждаш завършените и отменените резервации.'}
-            </p>
-            {tab === 'upcoming' && (
-              <Link to="/search" className="px-6 py-2.5 rounded-full text-white font-semibold text-sm hover:opacity-90 shadow-md"
-                style={{ background: 'var(--gradient-brand)' }}>
-                Намери услуга
-              </Link>
-            )}
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+            <EmptyState
+              icon={CalendarDays}
+              tone="teal"
+              title={tab === 'upcoming' ? 'Нямаш предстоящи резервации' : 'Нямаш минали резервации'}
+              description={
+                tab === 'upcoming'
+                  ? 'Намери услуга и направи резервация.'
+                  : 'Тук ще виждаш завършените и отменените резервации.'
+              }
+            >
+              {tab === 'upcoming' && (
+                <Link to="/search" className="px-6 py-2.5 rounded-full text-white font-semibold text-sm hover:opacity-90 shadow-md"
+                  style={{ background: 'var(--gradient-brand)' }}>
+                  Намери услуга
+                </Link>
+              )}
+            </EmptyState>
           </motion.div>
         ) : (
           <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-3">
